@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono&display=swap"
+        rel="stylesheet">
+    <title>CONTROL DE ELECTRICIDAD</title>
+    <style>
+        /* Esto es CSS - el asterisco aplica a TODA la página */
+        * {
+            font-family: 'IBM Plex Sans', sans-serif;
+            /* Nueva fuente para todo */
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            /* Fuente especial para el título */
+            font-size: 5rem;
+            color: #e8910e;
+            text-transform: uppercase;
+            line-height: 0.9;
+            /* Reduce espacio entre las dos líneas del título */
+        }
+
+        /* Estilo de las celdas */
+        th,
+        td {
+            padding: 12px;
+            /* Espacio interno */
+            text-align: left;
+            /* Texto alineado a la izquierda */
+            border: 1px solid #ccccccfe;
+            /* Borde gris */
+        }
+
+        /* Estilo solo del encabezado */
+        thead {
+            background-color: #070707;
+            /* Fondo negro */
+            color: rgb(255, 255, 255);
+            /* Texto blanco */
+        }
+
+        /* Fondo de la página */
+        body {
+            background-color: #f5f0e8;
+            /* Color crema */
+            padding: 2rem;
+            /* Espacio en los bordes */
+            max-width: 800px;
+            /* Ancho máximo */
+            margin: 0 auto;
+            /* Centrar en pantalla */
+        }
+
+        /* Filas alternas con color diferente */
+        tbody tr:nth-child(even) {
+            background-color: #ecb971;
+            /* Gris suave en filas pares */
+        }
+
+        /* Efecto hover - cambia color al pasar el mouse */
+        tbody tr:hover {
+            background-color: #e39708d5;
+            /* Rojo suave al pasar encima */
+        }
+
+        /* Estilo del campo de entrada de kWh */
+        input[type="number"] {
+            width: 100px;
+            padding: 6px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            /* Bordes redondeados */
+            font-size: 1rem;
+        }
+
+        input[type="number"]:focus {
+            border-color: #e8390e;
+            /* Borde rojo al hacer clic */
+            outline: none;
+            /* Quita el borde azul por defecto */
+        }
+
+        .precio-badge {
+            background: #1a1a1a;
+            /* Fondo negro */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            display: inline-block;
+            /* Se ajusta al contenido */
+            margin-bottom: 1rem;
+        }
+
+        .precio-badge .label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            /* Separación entre letras */
+            display: block;
+            /* Lo pone en su propia línea */
+            opacity: 0.6;
+        }
+
+        .precio-badge .valor {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            color: #f5a623;
+            /* Color amarillo/naranja */
+        }
+
+        /* Estilo especial para la fila del total */
+        tr:last-child {
+            background-color: #1a1a1a;
+            /* Fondo negro */
+            color: white;
+            /* Texto blanco */
+            font-size: 1.1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 4px 4px 0 #1a1a1a;
+            /* Sombra sólida estilo editorial */
+            border-radius: 8px;
+            overflow: hidden;
+            /* Para que el border-radius funcione en la tabla */
+        }
+
+        /* Encabezado con el título a la izquierda y el precio a la derecha */
+        .header {
+            display: flex;
+            /* Pone los elementos en fila */
+            justify-content: space-between;
+            /* Uno a la izquierda, otro a la derecha */
+            align-items: flex-end;
+            /* Alinea abajo */
+            border-bottom: 3px solid #1a1a1a;
+            /* Línea negra abajo */
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Línea separadora debajo del título */
+        h1 {
+            margin-bottom: 0;
+            /* Quita el espacio extra */
+        }
+
+        /* Estilo del número en la columna Total en Bs */
+        td:last-child {
+            font-family: 'IBM Plex Mono', monospace;
+            /* Fuente monoespaciada para números */
+            font-weight: 600;
+            color: #2d7a3a;
+            /* Verde para los montos */
+        }
+
+        /* Encabezados de la tabla en mayúsculas con fuente mono */
+        th {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            /* Separación entre letras */
+        }
+
+        /* Fila del selector de mes */
+        .mes-row {
+            display: flex;
+            /* Pone label e input en fila */
+            align-items: center;
+            /* Alinea verticalmente al centro */
+            gap: 1rem;
+            /* Espacio entre label e input */
+            margin-bottom: 1.5rem;
+        }
+
+        .mes-row label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888;
+            /* Gris */
+        }
+
+        .mes-row input[type="month"] {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            border: 2px solid #1a1a1a;
+            padding: 0.4rem 0.75rem;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Contenedor de las 3 tarjetas */
+        .resumen {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* 3 columnas iguales */
+            gap: 1rem;
+            /* Espacio entre tarjetas */
+            margin-top: 1.5rem;
+        }
+
+        /* Cada tarjeta */
+        .resumen-card {
+            background: white;
+            border: 2px solid #1a1a1a;
+            border-radius: 8px;
+            padding: 1.25rem;
+            box-shadow: 3px 3px 0 #1a1a1a;
+            /* Sombra sólida */
+        }
+
+        .resumen-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #888;
+            display: block;
+            /* Lo pone en su propia línea */
+            margin-bottom: 0.4rem;
+        }
+
+        .resumen-valor {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: #1a1a1a;
+            line-height: 1;
+        }
+
+        /* Contenedor de los botones */
+        .acciones {
+            display: flex;
+            /* Los pone en fila */
+            gap: 0.75rem;
+            /* Espacio entre botones */
+            margin-bottom: 1rem;
+        }
+
+        /* Botón negro de agregar */
+        .btn-agregar {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.5rem 1.1rem;
+            background: #1a1a1a;
+            /* Fondo negro */
+            color: #f5f0e8;
+            /* Texto crema */
+            border: 2px solid #1a1a1a;
+            border-radius: 4px;
+            cursor: pointer;
+            /* Cursor de mano al pasar encima */
+            transition: all 0.15s;
+            /* Animación suave */
+        }
+
+        .btn-agregar:hover {
+            background: #e8390e;
+            /* Se pone rojo al pasar el mouse */
+            border-color: #e8390e;
+        }
+
+        /* Botón transparente de limpiar */
+        .btn-limpiar {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.5rem 1.1rem;
+            background: transparent;
+            color: #888;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-limpiar:hover {
+            border-color: #e8390e;
+            /* Borde rojo al pasar el mouse */
+            color: #e8390e;
+        }
+
+        /* Encabezado del reporte */
+        .reporte-header {
+            display: flex;
+            justify-content: space-between;
+            /* Título a la izquierda, botón a la derecha */
+            align-items: center;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .reporte-header h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Botón imprimir */
+        .btn-imprimir {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.45rem 1rem;
+            background: #1a1a1a;
+            color: #f5f0e8;
+            border: 2px solid #1a1a1a;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-imprimir:hover {
+            background: #2d7a3a;
+            /* Verde al pasar el mouse */
+            border-color: #2d7a3a;
+        }
+
+        /* Lista del reporte */
+        .reporte-lista {
+            background: white;
+            border: 2px solid #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 4px 4px 0 #1a1a1a;
+        }
+
+        /* Cada fila del reporte */
+        .reporte-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            /* 4 columnas */
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1.25rem;
+            border-bottom: 1px solid #eee;
+            /* Línea separadora */
+        }
+
+        .reporte-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Sin línea en el último */
+
+        .reporte-num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            color: #e8390e;
+            /* Número en rojo */
+            width: 20px;
+        }
+
+        .reporte-nombre {
+            font-weight: 600;
+        }
+
+        .reporte-kwh {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .reporte-monto {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d7a3a;
+            /* Verde */
+            min-width: 90px;
+            text-align: right;
+        }
+
+        /* Botón guardar */
+        .btn-guardar {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.75rem 2rem;
+            background: #2d7a3a;
+            /* Verde */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+            width: 100%;
+            /* Ocupa todo el ancho */
+            transition: all 0.15s;
+        }
+
+        .btn-guardar:hover {
+            background: #1a5c27;
+            /* Verde más oscuro al pasar el mouse */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header"> <!-- Contenedor del encabezado -->
+        <h1>Control de<br>Electricidad</h1> <!-- El br hace el salto de línea -->
+        <div class="precio-badge">
+            <span class="label">Precio kWh</span>
+            <span class="valor">2.00 Bs</span>
+        </div>
+    </div>
+    <!-- Selector del mes de cobro -->
+    <div class="mes-row">
+        <label>Mes de cobro:</label> <!-- Etiqueta del campo -->
+        <input type="month" id="mes-input"> <!-- Campo para seleccionar mes y año -->
+    </div>
+    <!-- Fila de botones de acción -->
+    <div class="acciones">
+        <button class="btn-agregar" onclick="agregarTienda()">+ Agregar tienda</button>
+        <!-- Botón para añadir una fila nueva -->
+        <button class="btn-limpiar" onclick="limpiarKwh()">Limpiar kWh</button> <!-- Botón para borrar todos los kWh -->
+    </div>
+    <table> <!-- Crea una tabla, border="1" le pone bordes visibles -->
+        <thead> <!-- Sección de encabezados de la tabla -->
+            <tr> <!-- tr = table row = una fila -->
+                <th>#</th> <!-- th = table header = celda de encabezado -->
+                <th>TIENDAS</th>
+                <th>kWh consumidos</th>
+                <th>Total en Bs</th>
+            </tr>
+        </thead>
+
+        <tbody> <!-- Cuerpo de la tabla, aquí van los datos -->
+            <tr> <!-- Fila dela tienda 1 -->
+                <td>1</td> <!-- Número de tienda -->
+                <td>TIENDA 1</td> <!-- Nombre dela tienda -->
+                <td><input type="number" oninput="calcular()"></td> <!-- Campo donde se escribe los kWh -->
+                <td id="total1">0 Bs</td> <!-- Aquí aparece el resultado calculado -->
+            </tr>
+            <tr> <!-- Fila dela tienda 2 -->
+                <td>2</td>
+                <td>TIENDA 2</td>
+                <td><input type="number" oninput="calcular()"></td>
+                <td id="total2">0 Bs</td>
+            </tr>
+            <tr> <!-- Fila dela TIENDA 3 -->
+                <td>3</td>
+                <td>TIENDA 3</td>
+                <td><input type="number" oninput="calcular()"></td>
+                <td id="total3">0 Bs</td>
+            </tr>
+            <tr> <!-- Fila dela TIENDA 4 -->
+                <td>4</td>
+                <td>TIENDA 4</td>
+                <td><input type="number" oninput="calcular()"></td>
+                <td id="total4">0 Bs</td>
+            </tr>
+            <tr> <!-- Fila dela TIENDA 5 -->
+                <td>5</td>
+                <td>TIENDA 5</td>
+                <td><input type="number" oninput="calcular()"></td>
+                <td id="total5">0 Bs</td>
+            </tr>
+            <tr> <!-- Fila dela TIENDA 6 -->
+                <td>6</td>
+                <td>TIENDA 6</td>
+                <td><input type="number" oninput="calcular()"></td>
+                <td id="total6">0 Bs</td>
+            </tr>
+            <tr> <!-- Fila especial del total general -->
+                <td colspan="3"><strong>TOTAL GENERAL</strong></td>
+                <!-- colspan="3" hace que esta celda ocupe 3 columnas -->
+                <td id="totalGeneral"><strong>0 Bs</strong></td> <!-- Aquí aparece la suma de todos los TIENDAs -->
+            </tr>
+        </tbody>
+    </table> <!-- Cierre de la tabla -->
+    <!-- Botón para guardar los datos del mes en la base de datos -->
+    <button class="btn-guardar" onclick="guardarMes()">💾 Guardar mes</button>
+    <!-- Sección de tarjetas resumen -->
+    <div class="resumen">
+
+        <div class="resumen-card"> <!-- Tarjeta 1: Total general -->
+            <span class="resumen-label">Total a cobrar</span>
+            <div class="resumen-valor" id="res-total">0 Bs</div>
+        </div>
+
+        <div class="resumen-card"> <!-- Tarjeta 2: kWh totales -->
+            <span class="resumen-label">kWh totales</span>
+            <div class="resumen-valor" id="res-kwh">0</div>
+        </div>
+
+        <div class="resumen-card"> <!-- Tarjeta 3: Promedio -->
+            <span class="resumen-label">Promedio por TIENDA</span>
+            <div class="resumen-valor" id="res-prom">0 Bs</div>
+        </div>
+    </div>
+    <!-- Sección resumen de cobros -->
+    <div class="reporte-header">
+        <h2>Resumen de cobros</h2> <!-- Título de la sección -->
+        <button class="btn-imprimir" onclick="window.print()">🖨 Imprimir / PDF</button>
+        <!-- Abre el diálogo de impresión -->
+    </div>
+
+    <div class="reporte-lista" id="reporte"></div> <!-- Aquí JavaScript va a dibujar la lista -->
+    <script>  //JAVASCRIPT
+        // PRECIO POR KWH - cambia este número cuando cambie el precio
+        const PRECIO_KWH = 2; // Cambia este número cuando cambie el precio
+
+        function calcular() {
+            let totalGeneral = 0;
+            let totalKwh = 0;
+            let tiendas = 0; // Cuenta tiendas con datos
+
+            for (let i = 1; i <= 6; i++) {
+                let input = document.querySelector(`#total${i}`).previousElementSibling.querySelector('input');
+                let kwh = parseFloat(input.value) || 0;
+                let total = kwh * PRECIO_KWH;
+                document.getElementById(`total${i}`).textContent = total + " Bs";
+                totalGeneral += total;
+                totalKwh += kwh;
+                if (kwh > 0) tiendas++; // Solo cuenta si tiene kWh
+            }
+
+            // Actualiza fila total general
+            document.getElementById('totalGeneral').innerHTML = '<strong>' + totalGeneral + ' Bs</strong>';
+
+            // Actualiza las 3 tarjetas
+            document.getElementById('res-total').textContent = totalGeneral + ' Bs';
+            document.getElementById('res-kwh').textContent = totalKwh;
+            document.getElementById('res-prom').textContent = tiendas > 0 ? (totalGeneral / tiendas).toFixed(2) + ' Bs' : '0 Bs';
+            // Dibuja el reporte ordenado de mayor a menor consumo
+            let filas = [];
+            for (let i = 1; i <= document.querySelectorAll('input[type="number"]').length; i++) {
+                let input = document.querySelector(`#total${i}`).previousElementSibling.querySelector('input');
+                let kwh = parseFloat(input.value) || 0;
+                let nombre = document.querySelector(`#total${i}`).closest('tr').querySelectorAll('td')[1].textContent;
+                filas.push({ num: i, nombre, kwh, monto: kwh * PRECIO_KWH });
+            }
+
+            // Ordena de mayor a menor kWh
+            filas.sort((a, b) => b.kwh - a.kwh);
+
+            document.getElementById('reporte').innerHTML = filas.map((f, rank) => `
+    <div class="reporte-item">
+        <span class="reporte-num">${rank + 1}</span>
+        <span class="reporte-nombre">${f.nombre}</span>
+        <span class="reporte-kwh">${f.kwh} kWh</span>
+        <span class="reporte-monto">${f.monto === 0 ? '— Bs' : f.monto + ' Bs'}</span>
+    </div>
+`).join('');
+        }
+        // Pone el mes actual por defecto al cargar la página
+        const hoy = new Date(); // Obtiene la fecha de hoy
+        document.getElementById('mes-input').value =
+            hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0');
+        // getFullYear() = el año actual
+        // getMonth() + 1 = el mes actual (empieza en 0, por eso se suma 1)
+        // padStart(2,'0') = si el mes es 3, lo convierte en "03"
+        // Agrega una fila nueva a la tabla
+        function agregarTienda() {
+            let tbody = document.querySelector('tbody'); // Busca el tbody
+            let filas = tbody.querySelectorAll('tr');    // Cuenta las filas actuales
+            let num = filas.length;                      // El número de la nueva tienda
+
+            let nuevaFila = document.createElement('tr'); // Crea una fila nueva
+            nuevaFila.innerHTML = `
+        <td>${num}</td>
+        <td>tienda ${num}</td>
+        <td><input type="number" oninput="calcular()"></td>
+        <td id="total${num}">0 Bs</td>
+    `;
+            tbody.insertBefore(nuevaFila, tbody.lastElementChild); // La inserta antes del TOTAL GENERAL
+            calcular(); // Recalcula todo
+        }
+
+        // Limpia todos los kWh
+        function limpiarKwh() {
+            if (!confirm('¿Limpiar todos los kWh?')) return; // Pide confirmación
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.value = ''; // Borra cada campo
+            });
+            calcular(); // Recalcula todo en 0
+        }
+        // Guarda todos los datos del mes en la base de datos
+        async function guardarMes() {
+            const mes = document.getElementById('mes-input').value;
+
+            if (!mes) {
+                alert('Selecciona un mes primero');
+                return;
+            }
+
+            // Obtiene todas las filas de la tabla excepto la última (TOTAL GENERAL)
+            const filas = document.querySelectorAll('tbody tr:not(:last-child)');
+
+            for (let fila of filas) {
+                const celdas = fila.querySelectorAll('td');
+                const nombre = celdas[1].textContent.trim();        // Nombre de la tienda
+                const input = celdas[2].querySelector('input');     // Input de kWh
+                const kwh = parseFloat(input?.value) || 0;
+                const total = kwh * PRECIO_KWH;
+
+                await fetch('/api/guardar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tienda: nombre, kwh, total, mes })
+                });
+            }
+
+            alert('✅ Datos guardados correctamente en la base de datos');
+        }
+    </script>
+</body>
+
+</html>
