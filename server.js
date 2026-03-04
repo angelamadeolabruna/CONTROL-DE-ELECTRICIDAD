@@ -8,10 +8,11 @@ app.use(express.static('./'));
 
 // Conexión a la base de datos
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'pablo',      // usuario nuevo
-    password: '1234',   // contraseña que pusimos
-    database: 'control_electricidad'
+    host: process.env.MYSQLHOST || 'localhost',
+    user: process.env.MYSQLUSER || 'pablo',
+    password: process.env.MYSQLPASSWORD || '1234',
+    database: process.env.MYSQLDATABASE || 'control_electricidad',
+    port: process.env.MYSQLPORT || 3306
 });
 
 // Conecta a la base de datos
