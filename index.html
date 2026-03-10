@@ -957,7 +957,7 @@
         hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0');
 
     // Verifica si ya tiene token válido
-    if (TOKEN) {
+    if (TOKEN && TOKEN.length > 10) {
         mostrarApp();
     } else {
         mostrarLogin();
