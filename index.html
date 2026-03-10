@@ -14,7 +14,9 @@
             --text: #111110;
             --text-muted: #888884;
             --accent: #f0a500;
+            --accent-dark: #c88500;
             --green: #1a7a3a;
+            --green-light: #e8f5ec;
             --red: #d63b2f;
             --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
             --shadow-md: 0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.06);
@@ -30,8 +32,134 @@
             padding: 2.5rem 1.5rem;
         }
 
+        /* ── LOGIN ── */
+        #pantalla-login {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+            margin: -2.5rem -1.5rem;
+            background: var(--bg);
+        }
+
+        .login-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .login-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.3rem;
+        }
+
+        .login-subtitle {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .login-field {
+            margin-bottom: 1rem;
+        }
+
+        .login-field label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        .login-field input {
+            width: 100%;
+            padding: 0.65rem 0.9rem;
+            border: 1.5px solid var(--border-strong);
+            border-radius: 9px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            background: var(--bg);
+            transition: border-color 0.15s;
+        }
+
+        .login-field input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: white;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--text);
+            color: white;
+            border: none;
+            border-radius: 9px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: background 0.15s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-login:hover { background: var(--accent); color: var(--text); }
+
+        .login-error {
+            color: var(--red);
+            font-size: 0.82rem;
+            margin-top: 0.75rem;
+            text-align: center;
+            min-height: 1.2em;
+        }
+
+        .link-recuperar {
+            display: block;
+            text-align: center;
+            margin-top: 1.25rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .link-recuperar:hover { color: var(--accent); }
+
+        /* ── RECUPERAR ── */
+        #pantalla-recuperar {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+            margin: -2.5rem -1.5rem;
+            background: var(--bg);
+        }
+
+        /* ── APP ── */
+        #pantalla-app { display: none; }
+
         .page { max-width: 960px; margin: 0 auto; }
 
+        /* ── HEADER ── */
         .header {
             display: flex;
             justify-content: space-between;
@@ -47,6 +175,7 @@
             font-size: 2.6rem;
             letter-spacing: -0.03em;
             line-height: 1;
+            color: var(--text);
         }
 
         .header-left .subtitle {
@@ -56,6 +185,13 @@
             margin-top: 0.5rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
         }
 
         .precio-badge {
@@ -83,11 +219,28 @@
             color: var(--accent);
         }
 
+        .btn-salir {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.35rem 0.8rem;
+            background: transparent;
+            color: var(--text-muted);
+            border: 1.5px solid var(--border-strong);
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-salir:hover { border-color: var(--red); color: var(--red); }
+
+        /* ── CONTROLS ── */
         .controls {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             flex-wrap: wrap;
         }
 
@@ -127,21 +280,34 @@
             border: 1.5px solid transparent;
         }
 
-        .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-        .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: var(--text); }
-        .btn-ghost { background: transparent; color: var(--text-muted); border-color: var(--border-strong); }
-        .btn-ghost:hover { border-color: var(--red); color: var(--red); }
-
-        .info-box {
-            background: #fffbeb;
-            border: 1px solid #f0a500;
-            border-radius: 10px;
-            padding: 0.9rem 1.2rem;
-            margin-bottom: 1.5rem;
-            font-size: 0.85rem;
-            color: #7a5500;
+        .btn-primary {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
         }
 
+        .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: var(--text); }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-muted);
+            border-color: var(--border-strong);
+        }
+
+        .btn-ghost:hover { border-color: var(--red); color: var(--red); }
+
+        /* ── INFO BOX ── */
+        .info-box {
+            background: #fffbf0;
+            border: 1px solid #f0d080;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.82rem;
+            color: #7a6020;
+            margin-bottom: 1.25rem;
+        }
+
+        /* ── TABLE ── */
         .table-wrap {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -166,11 +332,7 @@
             font-weight: 500;
         }
 
-        td {
-            padding: 0.75rem 1.1rem;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
-        }
+        td { padding: 0.75rem 1.1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
 
         tbody tr:last-child td { border-bottom: none; }
         tbody tr:hover { background: #fafaf8; }
@@ -219,6 +381,7 @@
 
         .btn-guardar:hover { background: #145c2c; }
 
+        /* ── RESUMEN ── */
         .resumen {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -258,6 +421,7 @@
             line-height: 1;
         }
 
+        /* ── REPORTE ── */
         .reporte-header {
             display: flex;
             justify-content: space-between;
@@ -298,7 +462,7 @@
 
         .reporte-item {
             display: grid;
-            grid-template-columns: 28px 1fr auto auto auto;
+            grid-template-columns: 28px 1fr auto auto;
             align-items: center;
             gap: 1rem;
             padding: 0.9rem 1.25rem;
@@ -311,14 +475,125 @@
 
         .reporte-num { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--accent); }
         .reporte-nombre { font-weight: 500; font-size: 0.9rem; }
-        .reporte-lectura { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text-muted); }
         .reporte-kwh { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text-muted); }
         .reporte-monto { font-family: 'DM Mono', monospace; font-size: 0.9rem; font-weight: 500; color: var(--green); min-width: 80px; text-align: right; }
 
         .section-divider { height: 1px; background: var(--border); margin: 2rem 0; }
+
+        /* ── MODAL CAMBIAR PASS ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .modal-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+
+        .modal-error { color: var(--red); font-size: 0.82rem; margin-top: 0.5rem; min-height: 1.2em; }
+
+        .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
+
+        .btn-cancelar {
+            flex: 1;
+            padding: 0.65rem;
+            background: transparent;
+            border: 1.5px solid var(--border-strong);
+            border-radius: 8px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .btn-confirmar {
+            flex: 1;
+            padding: 0.65rem;
+            background: var(--text);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .btn-confirmar:hover { background: var(--green); }
     </style>
 </head>
 <body>
+
+<!-- ══ PANTALLA LOGIN ══ -->
+<div id="pantalla-login">
+    <div class="login-card">
+        <div class="login-title">Control de<br>Electricidad</div>
+        <div class="login-subtitle">Casa de Rojas Halan · Acceso privado</div>
+
+        <div class="login-field">
+            <label>Usuario</label>
+            <input type="text" id="login-user" placeholder="admin" autocomplete="username">
+        </div>
+        <div class="login-field">
+            <label>Contraseña</label>
+            <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') iniciarSesion()">
+        </div>
+
+        <button class="btn-login" onclick="iniciarSesion()">Entrar</button>
+        <div class="login-error" id="login-error"></div>
+
+        <span class="link-recuperar" onclick="mostrarRecuperar()">¿Olvidaste tu contraseña?</span>
+    </div>
+</div>
+
+<!-- ══ PANTALLA RECUPERAR ══ -->
+<div id="pantalla-recuperar">
+    <div class="login-card">
+        <div class="login-title">Recuperar<br>Acceso</div>
+        <div class="login-subtitle">Ingresá tu código de recuperación</div>
+
+        <div class="login-field">
+            <label>Código de recuperación</label>
+            <input type="text" id="rec-codigo" placeholder="RECUPERAR-2024">
+        </div>
+        <div class="login-field">
+            <label>Nueva contraseña</label>
+            <input type="password" id="rec-nueva" placeholder="••••••••">
+        </div>
+        <div class="login-field">
+            <label>Confirmar nueva contraseña</label>
+            <input type="password" id="rec-confirmar" placeholder="••••••••">
+        </div>
+
+        <button class="btn-login" onclick="recuperarPassword()">Cambiar contraseña</button>
+        <div class="login-error" id="rec-error"></div>
+
+        <span class="link-recuperar" onclick="mostrarLogin()">← Volver al login</span>
+    </div>
+</div>
+
+<!-- ══ PANTALLA APP ══ -->
+<div id="pantalla-app">
 <div class="page">
 
     <div class="header">
@@ -326,9 +601,13 @@
             <h1>Control de<br>Electricidad</h1>
             <div class="subtitle">Sistema de gestión de consumo &nbsp;·&nbsp; Casa de Rojas Halan</div>
         </div>
-        <div class="precio-badge">
-            <span class="label">Precio kWh</span>
-            <span class="valor">2.00 Bs</span>
+        <div class="header-right">
+            <div class="precio-badge">
+                <span class="label">Precio kWh</span>
+                <span class="valor">2.00 Bs</span>
+            </div>
+            <button class="btn-salir" onclick="cerrarSesion()">🔒 Cerrar sesión</button>
+            <button class="btn-salir" onclick="abrirModalPassword()" style="border-color: var(--border-strong);">🔑 Cambiar contraseña</button>
         </div>
     </div>
 
@@ -341,7 +620,7 @@
     </div>
 
     <div class="info-box">
-        📟 Ingresá la <strong>lectura actual del medidor</strong> de cada tienda. El sistema calcula automáticamente los kWh consumidos restando la lectura del mes anterior.
+        📟 Ingresá la <strong>lectura actual del medidor</strong> de cada tienda. El sistema calcula automáticamente los kWh consumidos restando la lectura anterior.
     </div>
 
     <div class="table-wrap">
@@ -357,59 +636,7 @@
                 </tr>
             </thead>
             <tbody id="tabla-body">
-                <tr>
-                    <td class="td-num">1</td>
-                    <td class="td-nombre">Tienda 1</td>
-                    <td class="td-lectura-ant" id="ant1">—</td>
-                    <td><input type="number" id="lectura1" oninput="calcular()" placeholder="0"></td>
-                    <td class="td-kwh" id="kwh1">0 kWh</td>
-                    <td class="td-total" id="total1">0 Bs</td>
-                </tr>
-                <tr>
-                    <td class="td-num">2</td>
-                    <td class="td-nombre">Tienda 2</td>
-                    <td class="td-lectura-ant" id="ant2">—</td>
-                    <td><input type="number" id="lectura2" oninput="calcular()" placeholder="0"></td>
-                    <td class="td-kwh" id="kwh2">0 kWh</td>
-                    <td class="td-total" id="total2">0 Bs</td>
-                </tr>
-                <tr>
-                    <td class="td-num">3</td>
-                    <td class="td-nombre">Tienda 3</td>
-                    <td class="td-lectura-ant" id="ant3">—</td>
-                    <td><input type="number" id="lectura3" oninput="calcular()" placeholder="0"></td>
-                    <td class="td-kwh" id="kwh3">0 kWh</td>
-                    <td class="td-total" id="total3">0 Bs</td>
-                </tr>
-                <tr>
-                    <td class="td-num">4</td>
-                    <td class="td-nombre">Tienda 4</td>
-                    <td class="td-lectura-ant" id="ant4">—</td>
-                    <td><input type="number" id="lectura4" oninput="calcular()" placeholder="0"></td>
-                    <td class="td-kwh" id="kwh4">0 kWh</td>
-                    <td class="td-total" id="total4">0 Bs</td>
-                </tr>
-                <tr>
-                    <td class="td-num">5</td>
-                    <td class="td-nombre">Tienda 5</td>
-                    <td class="td-lectura-ant" id="ant5">—</td>
-                    <td><input type="number" id="lectura5" oninput="calcular()" placeholder="0"></td>
-                    <td class="td-kwh" id="kwh5">0 kWh</td>
-                    <td class="td-total" id="total5">0 Bs</td>
-                </tr>
-                <tr>
-                    <td class="td-num">6</td>
-                    <td class="td-nombre">Tienda 6</td>
-                    <td class="td-lectura-ant" id="ant6">—</td>
-                    <td><input type="number" id="lectura6" oninput="calcular()" placeholder="0"></td>
-                    <td class="td-kwh" id="kwh6">0 kWh</td>
-                    <td class="td-total" id="total6">0 Bs</td>
-                </tr>
-                <tr class="row-total">
-                    <td colspan="4"><strong>Total general</strong></td>
-                    <td class="td-kwh" id="totalKwh"><strong>0 kWh</strong></td>
-                    <td class="td-total" id="totalGeneral"><strong>0 Bs</strong></td>
-                </tr>
+                <!-- filas generadas por JS -->
             </tbody>
         </table>
     </div>
@@ -440,163 +667,300 @@
     <div class="reporte-lista" id="reporte"></div>
 
 </div>
+</div>
+
+<!-- ══ MODAL CAMBIAR PASSWORD ══ -->
+<div class="modal-overlay" id="modal-password">
+    <div class="modal-card">
+        <div class="modal-title">Cambiar contraseña</div>
+        <div class="login-field">
+            <label>Contraseña actual</label>
+            <input type="password" id="cp-actual" placeholder="••••••••">
+        </div>
+        <div class="login-field">
+            <label>Nueva contraseña</label>
+            <input type="password" id="cp-nueva" placeholder="••••••••">
+        </div>
+        <div class="login-field">
+            <label>Confirmar nueva contraseña</label>
+            <input type="password" id="cp-confirmar" placeholder="••••••••">
+        </div>
+        <div class="modal-error" id="cp-error"></div>
+        <div class="modal-actions">
+            <button class="btn-cancelar" onclick="cerrarModalPassword()">Cancelar</button>
+            <button class="btn-confirmar" onclick="cambiarPassword()">Guardar</button>
+        </div>
+    </div>
+</div>
 
 <script>
     const PRECIO_KWH = 2;
     let cantidadTiendas = 6;
     let lecturasAnteriores = {};
+    let TOKEN = localStorage.getItem('token_electricidad') || '';
 
-    async function cargarLecturasAnteriores() {
-        const mes = document.getElementById('mes-input').value;
-        if (!mes) return;
+    // ── AUTH ──
+
+    async function iniciarSesion() {
+        const username = document.getElementById('login-user').value.trim();
+        const password = document.getElementById('login-pass').value;
+        document.getElementById('login-error').textContent = '';
 
         try {
-            const res = await fetch(`/api/lecturas-anteriores/${mes}`);
-            const datos = await res.json();
-
-            lecturasAnteriores = {};
-            datos.forEach(d => {
-                lecturasAnteriores[d.tienda] = parseFloat(d.lectura);
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
             });
-
-            for (let i = 1; i <= cantidadTiendas; i++) {
-                const fila = document.getElementById(`lectura${i}`)?.closest('tr');
-                const nombre = fila?.querySelectorAll('td')[1]?.textContent?.trim();
-                const antEl = document.getElementById(`ant${i}`);
-                if (antEl) {
-                    if (nombre && lecturasAnteriores[nombre] !== undefined) {
-                        antEl.textContent = lecturasAnteriores[nombre] + ' kWh';
-                    } else {
-                        antEl.textContent = '— (primera vez)';
-                    }
-                }
+            const data = await res.json();
+            if (!res.ok) {
+                document.getElementById('login-error').textContent = data.error || 'Error al iniciar sesión';
+                return;
             }
-            calcular();
-        } catch (e) {
-            console.log('Error cargando lecturas anteriores:', e);
+            TOKEN = data.token;
+            localStorage.setItem('token_electricidad', TOKEN);
+            mostrarApp();
+        } catch {
+            document.getElementById('login-error').textContent = 'Error de conexión';
         }
     }
 
-    function getNombre(i) {
-        return document.getElementById(`lectura${i}`)?.closest('tr')?.querySelectorAll('td')[1]?.textContent?.trim();
+    async function recuperarPassword() {
+        const codigo = document.getElementById('rec-codigo').value.trim();
+        const nueva = document.getElementById('rec-nueva').value;
+        const confirmar = document.getElementById('rec-confirmar').value;
+        const errEl = document.getElementById('rec-error');
+        errEl.textContent = '';
+
+        if (nueva !== confirmar) { errEl.textContent = 'Las contraseñas no coinciden'; return; }
+        if (nueva.length < 6) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres'; return; }
+
+        try {
+            const res = await fetch('/api/recuperar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ codigo, nueva_password: nueva })
+            });
+            const data = await res.json();
+            if (!res.ok) { errEl.textContent = data.error; return; }
+            alert('✅ Contraseña actualizada. Iniciá sesión con tu nueva contraseña.');
+            mostrarLogin();
+        } catch {
+            errEl.textContent = 'Error de conexión';
+        }
+    }
+
+    async function cambiarPassword() {
+        const actual = document.getElementById('cp-actual').value;
+        const nueva = document.getElementById('cp-nueva').value;
+        const confirmar = document.getElementById('cp-confirmar').value;
+        const errEl = document.getElementById('cp-error');
+        errEl.textContent = '';
+
+        if (nueva !== confirmar) { errEl.textContent = 'Las contraseñas no coinciden'; return; }
+        if (nueva.length < 6) { errEl.textContent = 'Mínimo 6 caracteres'; return; }
+
+        try {
+            const res = await fetch('/api/cambiar-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
+                body: JSON.stringify({ password_actual: actual, nueva_password: nueva })
+            });
+            const data = await res.json();
+            if (!res.ok) { errEl.textContent = data.error; return; }
+            alert('✅ Contraseña cambiada correctamente');
+            cerrarModalPassword();
+        } catch {
+            errEl.textContent = 'Error de conexión';
+        }
+    }
+
+    function cerrarSesion() {
+        if (!confirm('¿Cerrar sesión?')) return;
+        TOKEN = '';
+        localStorage.removeItem('token_electricidad');
+        mostrarLogin();
+    }
+
+    // ── NAVEGACIÓN ──
+
+    function mostrarLogin() {
+        document.getElementById('pantalla-login').style.display = 'flex';
+        document.getElementById('pantalla-recuperar').style.display = 'none';
+        document.getElementById('pantalla-app').style.display = 'none';
+    }
+
+    function mostrarRecuperar() {
+        document.getElementById('pantalla-login').style.display = 'none';
+        document.getElementById('pantalla-recuperar').style.display = 'flex';
+        document.getElementById('pantalla-app').style.display = 'none';
+    }
+
+    function mostrarApp() {
+        document.getElementById('pantalla-login').style.display = 'none';
+        document.getElementById('pantalla-recuperar').style.display = 'none';
+        document.getElementById('pantalla-app').style.display = 'block';
+        inicializarTabla();
+        cargarLecturasAnteriores();
+    }
+
+    function abrirModalPassword() { document.getElementById('modal-password').classList.add('active'); }
+    function cerrarModalPassword() {
+        document.getElementById('modal-password').classList.remove('active');
+        document.getElementById('cp-actual').value = '';
+        document.getElementById('cp-nueva').value = '';
+        document.getElementById('cp-confirmar').value = '';
+        document.getElementById('cp-error').textContent = '';
+    }
+
+    // ── TABLA ──
+
+    function inicializarTabla() {
+        const tbody = document.getElementById('tabla-body');
+        tbody.innerHTML = '';
+        for (let i = 1; i <= cantidadTiendas; i++) {
+            tbody.appendChild(crearFila(i));
+        }
+        tbody.appendChild(crearFilaTotal());
+        calcular();
+    }
+
+    function crearFila(num) {
+        const tr = document.createElement('tr');
+        tr.id = `fila-${num}`;
+        tr.innerHTML = `
+            <td class="td-num">${num}</td>
+            <td class="td-nombre" contenteditable="true" spellcheck="false">Tienda ${num}</td>
+            <td class="td-lectura-ant" id="ant-${num}">—</td>
+            <td><input type="number" id="lectura-${num}" oninput="calcular()" placeholder="0" min="0"></td>
+            <td class="td-kwh" id="kwh-${num}">0 kWh</td>
+            <td class="td-total" id="total-${num}">0 Bs</td>
+        `;
+        return tr;
+    }
+
+    function crearFilaTotal() {
+        const tr = document.createElement('tr');
+        tr.className = 'row-total';
+        tr.innerHTML = `
+            <td colspan="4"><strong>Total general</strong></td>
+            <td class="td-kwh" id="totalKwh"><strong>0 kWh</strong></td>
+            <td class="td-total" id="totalGeneral"><strong>0 Bs</strong></td>
+        `;
+        return tr;
     }
 
     function calcular() {
         let totalGeneral = 0;
         let totalKwh = 0;
         let tiendas = 0;
+        let filas = [];
 
         for (let i = 1; i <= cantidadTiendas; i++) {
-            const input = document.getElementById(`lectura${i}`);
+            const input = document.getElementById(`lectura-${i}`);
             if (!input) continue;
-
             const lecturaActual = parseFloat(input.value) || 0;
-            const nombre = getNombre(i);
-            const lecturaAnt = (nombre && lecturasAnteriores[nombre] !== undefined) ? lecturasAnteriores[nombre] : 0;
-            const kwh = lecturaActual > 0 ? Math.max(0, lecturaActual - lecturaAnt) : 0;
+            const nombreEl = document.querySelector(`#fila-${i} .td-nombre`);
+            const nombre = nombreEl ? nombreEl.textContent.trim() : `Tienda ${i}`;
+            const lecturaAnterior = lecturasAnteriores[nombre] || 0;
+            const kwh = Math.max(0, lecturaActual - lecturaAnterior);
             const total = kwh * PRECIO_KWH;
 
-            const kwhEl = document.getElementById(`kwh${i}`);
-            const totalEl = document.getElementById(`total${i}`);
-            if (kwhEl) kwhEl.textContent = kwh.toFixed(1) + ' kWh';
-            if (totalEl) totalEl.textContent = total.toFixed(2) + ' Bs';
+            document.getElementById(`kwh-${i}`).textContent = kwh.toFixed(1) + ' kWh';
+            document.getElementById(`total-${i}`).textContent = total.toFixed(2) + ' Bs';
 
             totalGeneral += total;
             totalKwh += kwh;
-            if (kwh > 0) tiendas++;
+            if (lecturaActual > 0) tiendas++;
+            filas.push({ num: i, nombre, kwh, monto: total });
         }
 
-        document.getElementById('totalKwh').innerHTML = '<strong>' + totalKwh.toFixed(1) + ' kWh</strong>';
         document.getElementById('totalGeneral').innerHTML = '<strong>' + totalGeneral.toFixed(2) + ' Bs</strong>';
+        document.getElementById('totalKwh').innerHTML = '<strong>' + totalKwh.toFixed(1) + ' kWh</strong>';
         document.getElementById('res-total').textContent = totalGeneral.toFixed(2) + ' Bs';
         document.getElementById('res-kwh').textContent = totalKwh.toFixed(1);
         document.getElementById('res-prom').textContent = tiendas > 0 ? (totalGeneral / tiendas).toFixed(2) + ' Bs' : '0 Bs';
 
-        let filas = [];
-        for (let i = 1; i <= cantidadTiendas; i++) {
-            const input = document.getElementById(`lectura${i}`);
-            if (!input) continue;
-            const lecturaActual = parseFloat(input.value) || 0;
-            const nombre = getNombre(i) || `Tienda ${i}`;
-            const lecturaAnt = (lecturasAnteriores[nombre] !== undefined) ? lecturasAnteriores[nombre] : 0;
-            const kwh = lecturaActual > 0 ? Math.max(0, lecturaActual - lecturaAnt) : 0;
-            filas.push({ nombre, lectura: lecturaActual, lecturaAnt, kwh, monto: kwh * PRECIO_KWH });
-        }
-
         filas.sort((a, b) => b.kwh - a.kwh);
-
         document.getElementById('reporte').innerHTML = filas.map((f, rank) => `
             <div class="reporte-item">
                 <span class="reporte-num">${rank + 1}</span>
                 <span class="reporte-nombre">${f.nombre}</span>
-                <span class="reporte-lectura">${f.lecturaAnt} → ${f.lectura}</span>
                 <span class="reporte-kwh">${f.kwh.toFixed(1)} kWh</span>
                 <span class="reporte-monto">${f.monto === 0 ? '— Bs' : f.monto.toFixed(2) + ' Bs'}</span>
             </div>
         `).join('');
     }
 
-    const hoy = new Date();
-    document.getElementById('mes-input').value =
-        hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0');
+    async function cargarLecturasAnteriores() {
+        const mes = document.getElementById('mes-input').value;
+        if (!mes) return;
+        try {
+            const res = await fetch(`/api/lecturas-anteriores/${mes}`, {
+                headers: { 'Authorization': 'Bearer ' + TOKEN }
+            });
+            if (res.status === 401) { cerrarSesion(); return; }
+            const data = await res.json();
+            lecturasAnteriores = {};
+            data.forEach(r => { lecturasAnteriores[r.tienda] = parseFloat(r.lectura); });
+            for (let i = 1; i <= cantidadTiendas; i++) {
+                const nombreEl = document.querySelector(`#fila-${i} .td-nombre`);
+                const nombre = nombreEl ? nombreEl.textContent.trim() : `Tienda ${i}`;
+                const antEl = document.getElementById(`ant-${i}`);
+                if (antEl) antEl.textContent = lecturasAnteriores[nombre] !== undefined ? lecturasAnteriores[nombre] + ' kWh' : '—';
+            }
+            calcular();
+        } catch {}
+    }
 
-    cargarLecturasAnteriores();
+    async function guardarMes() {
+        const mes = document.getElementById('mes-input').value;
+        if (!mes) { alert('Seleccioná un mes primero'); return; }
+
+        for (let i = 1; i <= cantidadTiendas; i++) {
+            const input = document.getElementById(`lectura-${i}`);
+            if (!input || !input.value) continue;
+            const nombreEl = document.querySelector(`#fila-${i} .td-nombre`);
+            const nombre = nombreEl ? nombreEl.textContent.trim() : `Tienda ${i}`;
+            const lectura = parseFloat(input.value) || 0;
+
+            await fetch('/api/guardar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
+                body: JSON.stringify({ tienda: nombre, lectura, mes })
+            });
+        }
+        alert('✅ Datos guardados correctamente');
+        cargarLecturasAnteriores();
+    }
 
     function agregarTienda() {
         cantidadTiendas++;
-        const num = cantidadTiendas;
         const tbody = document.getElementById('tabla-body');
         const rowTotal = tbody.querySelector('.row-total');
-        const nuevaFila = document.createElement('tr');
-        nuevaFila.innerHTML = `
-            <td class="td-num">${num}</td>
-            <td class="td-nombre">Tienda ${num}</td>
-            <td class="td-lectura-ant" id="ant${num}">— (primera vez)</td>
-            <td><input type="number" id="lectura${num}" oninput="calcular()" placeholder="0"></td>
-            <td class="td-kwh" id="kwh${num}">0 kWh</td>
-            <td class="td-total" id="total${num}">0 Bs</td>
-        `;
-        tbody.insertBefore(nuevaFila, rowTotal);
+        tbody.insertBefore(crearFila(cantidadTiendas), rowTotal);
         calcular();
     }
 
     function limpiarLecturas() {
         if (!confirm('¿Limpiar todas las lecturas?')) return;
         for (let i = 1; i <= cantidadTiendas; i++) {
-            const input = document.getElementById(`lectura${i}`);
+            const input = document.getElementById(`lectura-${i}`);
             if (input) input.value = '';
         }
         calcular();
     }
 
-    async function guardarMes() {
-        const mes = document.getElementById('mes-input').value;
-        if (!mes) { alert('Selecciona un mes primero'); return; }
+    // ── INIT ──
+    const hoy = new Date();
+    document.getElementById('mes-input').value =
+        hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0');
 
-        let guardados = 0;
-
-        for (let i = 1; i <= cantidadTiendas; i++) {
-            const input = document.getElementById(`lectura${i}`);
-            if (!input) continue;
-            const lectura = parseFloat(input.value) || 0;
-            if (lectura === 0) continue;
-            const nombre = getNombre(i);
-
-            const res = await fetch('/api/guardar', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tienda: nombre, lectura, mes })
-            });
-            const data = await res.json();
-            if (data.mensaje) guardados++;
-        }
-
-        if (guardados > 0) {
-            alert(`✅ ${guardados} tienda(s) guardadas correctamente`);
-            cargarLecturasAnteriores();
-        } else {
-            alert('⚠️ No hay lecturas para guardar. Ingresá los valores del medidor primero.');
-        }
+    // Verifica si ya tiene token válido
+    if (TOKEN) {
+        mostrarApp();
+    } else {
+        mostrarLogin();
     }
 </script>
 </body>
