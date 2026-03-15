@@ -172,27 +172,38 @@ app.post('/api/recuperar', (req, res) => {
 // Reset admin (usar solo una vez si perdés acceso, luego eliminar)
 app.get('/api/reset-admin', (req, res) => {
     const passwordHash = bcrypt.hashSync('admin1234', 10);
-    db.query('SELECT COUNT(*) as total FROM usuario WHERE username = ?', ['admin'], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        if (rows[0].total > 0) {
-            db.query(
-                'UPDATE usuario SET password_hash = ?, email = ? WHERE username = ?',
-                [passwordHash, 'gabriel19soto@gmail.com', 'admin'],
-                (err) => {
+
+    // Primero aseguramos que las columnas existen
+    db.query("ALTER TABLE usuario ADD COLUMN IF NOT EXISTS email VARCHAR(255)", () => {
+        db.query("ALTER TABLE usuario ADD COLUMN IF NOT EXISTS codigo_recuperacion VARCHAR(255)", () => {
+            db.query("ALTER TABLE usuario ADD COLUMN IF NOT EXISTS codigo_expira DATETIME", () => {
+
+                db.query('SELECT COUNT(*) as total FROM usuario WHERE username = ?', ['admin'], (err, rows) => {
                     if (err) return res.status(500).json({ error: err.message });
-                    res.json({ ok: true, mensaje: '✅ Contraseña del admin reseteada a: admin1234' });
-                }
-            );
-        } else {
-            db.query(
-                'INSERT INTO usuario (username, password_hash, email) VALUES (?, ?, ?)',
-                ['admin', passwordHash, 'gabriel19soto@gmail.com'],
-                (err) => {
-                    if (err) return res.status(500).json({ error: err.message });
-                    res.json({ ok: true, mensaje: '✅ Usuario admin creado con contraseña: admin1234' });
-                }
-            );
-        }
+
+                    if (rows[0].total > 0) {
+                        db.query(
+                            'UPDATE usuario SET password_hash = ?, email = ? WHERE username = ?',
+                            [passwordHash, 'gabriel19soto@gmail.com', 'admin'],
+                            (err) => {
+                                if (err) return res.status(500).json({ error: err.message });
+                                res.json({ ok: true, mensaje: '✅ Contraseña del admin reseteada a: admin1234' });
+                            }
+                        );
+                    } else {
+                        db.query(
+                            'INSERT INTO usuario (username, password_hash, email) VALUES (?, ?, ?)',
+                            ['admin', passwordHash, 'gabriel19soto@gmail.com'],
+                            (err) => {
+                                if (err) return res.status(500).json({ error: err.message });
+                                res.json({ ok: true, mensaje: '✅ Usuario admin creado con contraseña: admin1234' });
+                            }
+                        );
+                    }
+                });
+
+            });
+        });
     });
 });
 
