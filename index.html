@@ -569,26 +569,41 @@
 <!-- ══ PANTALLA RECUPERAR ══ -->
 <div id="pantalla-recuperar">
     <div class="login-card">
-        <div class="login-title">Recuperar<br>Acceso</div>
-        <div class="login-subtitle">Ingresá tu código de recuperación</div>
 
-        <div class="login-field">
-            <label>Código de recuperación</label>
-            <input type="text" id="rec-codigo" placeholder="RECUPERAR-2024">
-        </div>
-        <div class="login-field">
-            <label>Nueva contraseña</label>
-            <input type="password" id="rec-nueva" placeholder="••••••••">
-        </div>
-        <div class="login-field">
-            <label>Confirmar nueva contraseña</label>
-            <input type="password" id="rec-confirmar" placeholder="••••••••">
+        <!-- PASO 1: Pedir correo -->
+        <div id="rec-paso1">
+            <div class="login-title">Recuperar<br>Acceso</div>
+            <div class="login-subtitle">Ingresá tu correo y te enviamos un código</div>
+            <div class="login-field">
+                <label>Correo electrónico</label>
+                <input type="email" id="rec-email" placeholder="tucorreo@gmail.com">
+            </div>
+            <button class="btn-login" onclick="solicitarCodigo()">Enviar código</button>
+            <div class="login-error" id="rec-error1"></div>
+            <span class="link-recuperar" onclick="mostrarLogin()">← Volver al login</span>
         </div>
 
-        <button class="btn-login" onclick="recuperarPassword()">Cambiar contraseña</button>
-        <div class="login-error" id="rec-error"></div>
+        <!-- PASO 2: Ingresar código y nueva contraseña -->
+        <div id="rec-paso2" style="display:none">
+            <div class="login-title">Nuevo<br>Acceso</div>
+            <div class="login-subtitle">Ingresá el código que llegó a tu correo</div>
+            <div class="login-field">
+                <label>Código de 6 dígitos</label>
+                <input type="text" id="rec-codigo" placeholder="123456" maxlength="6">
+            </div>
+            <div class="login-field">
+                <label>Nueva contraseña</label>
+                <input type="password" id="rec-nueva" placeholder="••••••••">
+            </div>
+            <div class="login-field">
+                <label>Confirmar nueva contraseña</label>
+                <input type="password" id="rec-confirmar" placeholder="••••••••">
+            </div>
+            <button class="btn-login" onclick="recuperarPassword()">Cambiar contraseña</button>
+            <div class="login-error" id="rec-error2"></div>
+            <span class="link-recuperar" onclick="volverPaso1()">← Volver</span>
+        </div>
 
-        <span class="link-recuperar" onclick="mostrarLogin()">← Volver al login</span>
     </div>
 </div>
 
@@ -725,11 +740,39 @@
         }
     }
 
+    async function solicitarCodigo() {
+        const email = document.getElementById('rec-email').value.trim();
+        const errEl = document.getElementById('rec-error1');
+        errEl.textContent = '';
+        if (!email) { errEl.textContent = 'Ingresá tu correo'; return; }
+        try {
+            const res = await fetch('/api/solicitar-recuperacion', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const data = await res.json();
+            if (!res.ok) { errEl.textContent = data.error; return; }
+            // Mostrar paso 2
+            document.getElementById('rec-paso1').style.display = 'none';
+            document.getElementById('rec-paso2').style.display = 'block';
+        } catch {
+            errEl.textContent = 'Error de conexión';
+        }
+    }
+
+    function volverPaso1() {
+        document.getElementById('rec-paso1').style.display = 'block';
+        document.getElementById('rec-paso2').style.display = 'none';
+        document.getElementById('rec-error2').textContent = '';
+    }
+
     async function recuperarPassword() {
+        const email = document.getElementById('rec-email').value.trim();
         const codigo = document.getElementById('rec-codigo').value.trim();
         const nueva = document.getElementById('rec-nueva').value;
         const confirmar = document.getElementById('rec-confirmar').value;
-        const errEl = document.getElementById('rec-error');
+        const errEl = document.getElementById('rec-error2');
         errEl.textContent = '';
 
         if (nueva !== confirmar) { errEl.textContent = 'Las contraseñas no coinciden'; return; }
@@ -739,7 +782,7 @@
             const res = await fetch('/api/recuperar', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ codigo, nueva_password: nueva })
+                body: JSON.stringify({ email, codigo, nueva_password: nueva })
             });
             const data = await res.json();
             if (!res.ok) { errEl.textContent = data.error; return; }

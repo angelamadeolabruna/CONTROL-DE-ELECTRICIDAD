@@ -2,10 +2,20 @@ const express = require('express');
 const mysql = require('mysql2');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 const JWT_SECRET = process.env.JWT_SECRET || 'clave_secreta_electricidad_2024';
+
+// Configuración de email
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'gabriel19soto@gmail.com',
+        pass: process.env.GMAIL_APP_PASSWORD || 'znohxrldqekdsbst'
+    }
+});
 
 app.use(express.json());
 app.use(express.static('./'));
@@ -35,21 +45,28 @@ function crearTablaUsuario() {
             id INT AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(100) NOT NULL,
             password_hash VARCHAR(255) NOT NULL,
-            codigo_recuperacion VARCHAR(255) NOT NULL,
+            email VARCHAR(255),
+            codigo_recuperacion VARCHAR(255),
+            codigo_expira DATETIME,
             creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     `;
     db.query(sql, (err) => {
         if (err) { console.log('Error creando tabla usuario:', err); return; }
+
+        // Agregar columnas nuevas si no existen
+        db.query("ALTER TABLE usuario ADD COLUMN IF NOT EXISTS email VARCHAR(255)", () => {});
+        db.query("ALTER TABLE usuario ADD COLUMN IF NOT EXISTS codigo_recuperacion VARCHAR(255)", () => {});
+        db.query("ALTER TABLE usuario ADD COLUMN IF NOT EXISTS codigo_expira DATETIME", () => {});
+
         // Si no hay usuario, crea uno por defecto
         db.query('SELECT COUNT(*) as total FROM usuario', (err, res) => {
             if (err || res[0].total > 0) return;
             const passwordHash = bcrypt.hashSync('admin1234', 10);
-            const codigoHash = bcrypt.hashSync('RECUPERAR-2024', 10);
             db.query(
-                'INSERT INTO usuario (username, password_hash, codigo_recuperacion) VALUES (?, ?, ?)',
-                ['admin', passwordHash, codigoHash],
-                () => console.log('Usuario por defecto creado ✅ user: admin | pass: admin1234 | codigo: RECUPERAR-2024')
+                'INSERT INTO usuario (username, password_hash, email) VALUES (?, ?, ?)',
+                ['admin', passwordHash, 'gabriel19soto@gmail.com'],
+                () => console.log('Usuario por defecto creado ✅ user: admin | pass: admin1234')
             );
         });
     });
@@ -60,6 +77,7 @@ function verificarToken(req, res, next) {
     const auth = req.headers['authorization'];
     if (!auth) return res.status(401).json({ error: 'No autorizado' });
     const token = auth.split(' ')[1];
+    if (!token || token.length < 10) return res.status(401).json({ error: 'Token inválido' });
     try {
         req.usuario = jwt.verify(token, JWT_SECRET);
         next();
@@ -83,19 +101,71 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// Recuperar contraseña con código
+// Solicitar código de recuperación por email
+app.post('/api/solicitar-recuperacion', (req, res) => {
+    const { email } = req.body;
+    db.query('SELECT * FROM usuario WHERE email = ?', [email], (err, rows) => {
+        if (err || rows.length === 0) return res.status(404).json({ error: 'No se encontró una cuenta con ese correo' });
+        
+        const user = rows[0];
+        const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+        const expira = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos
+
+        db.query(
+            'UPDATE usuario SET codigo_recuperacion = ?, codigo_expira = ? WHERE id = ?',
+            [codigo, expira, user.id],
+            (err) => {
+                if (err) return res.status(500).json({ error: 'Error interno' });
+
+                const mailOptions = {
+                    from: 'gabriel19soto@gmail.com',
+                    to: email,
+                    subject: 'Código de recuperación - Control de Electricidad',
+                    html: `
+                        <div style="font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 30px; border: 1px solid #eee; border-radius: 10px;">
+                            <h2 style="color: #1a1a1a;">🔑 Recuperar contraseña</h2>
+                            <p style="color: #666;">Tu código de recuperación es:</p>
+                            <div style="background: #f5f5f5; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0;">
+                                <span style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #1a1a1a;">${codigo}</span>
+                            </div>
+                            <p style="color: #999; font-size: 14px;">Este código expira en <strong>15 minutos</strong>.</p>
+                            <p style="color: #999; font-size: 14px;">Si no solicitaste este código, ignorá este mensaje.</p>
+                        </div>
+                    `
+                };
+
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                        console.log('Error enviando email:', error);
+                        return res.status(500).json({ error: 'Error enviando el correo' });
+                    }
+                    res.json({ mensaje: 'Código enviado al correo ✅' });
+                });
+            }
+        );
+    });
+});
+
+// Recuperar contraseña con código recibido por email
 app.post('/api/recuperar', (req, res) => {
-    const { codigo, nueva_password } = req.body;
-    db.query('SELECT * FROM usuario LIMIT 1', (err, rows) => {
+    const { email, codigo, nueva_password } = req.body;
+    db.query('SELECT * FROM usuario WHERE email = ?', [email], (err, rows) => {
         if (err || rows.length === 0) return res.status(400).json({ error: 'Error interno' });
         const user = rows[0];
-        if (!bcrypt.compareSync(codigo, user.codigo_recuperacion))
-            return res.status(401).json({ error: 'Código de recuperación incorrecto' });
+        
+        if (!user.codigo_recuperacion) return res.status(401).json({ error: 'No hay código activo. Solicitá uno nuevo.' });
+        if (user.codigo_recuperacion !== codigo) return res.status(401).json({ error: 'Código incorrecto' });
+        if (new Date() > new Date(user.codigo_expira)) return res.status(401).json({ error: 'El código expiró. Solicitá uno nuevo.' });
+        
         const nuevoHash = bcrypt.hashSync(nueva_password, 10);
-        db.query('UPDATE usuario SET password_hash = ? WHERE id = ?', [nuevoHash, user.id], (err) => {
-            if (err) return res.status(500).json({ error: 'Error actualizando contraseña' });
-            res.json({ mensaje: 'Contraseña actualizada ✅' });
-        });
+        db.query(
+            'UPDATE usuario SET password_hash = ?, codigo_recuperacion = NULL, codigo_expira = NULL WHERE id = ?',
+            [nuevoHash, user.id],
+            (err) => {
+                if (err) return res.status(500).json({ error: 'Error actualizando contraseña' });
+                res.json({ mensaje: 'Contraseña actualizada ✅' });
+            }
+        );
     });
 });
 
