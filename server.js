@@ -54,10 +54,16 @@ function crearTablaUsuario() {
     db.query(sql, (err) => {
         if (err) { console.log('Error creando tabla usuario:', err); return; }
 
-        // Agregar columnas nuevas si no existen
-        db.query("ALTER TABLE usuario ADD COLUMN IF NOT EXISTS email VARCHAR(255)", () => {});
-        db.query("ALTER TABLE usuario ADD COLUMN IF NOT EXISTS codigo_recuperacion VARCHAR(255)", () => {});
-        db.query("ALTER TABLE usuario ADD COLUMN IF NOT EXISTS codigo_expira DATETIME", () => {});
+        // Agregar columnas nuevas si no existen (compatible con Railway)
+        const agregarColumna = (col, tipo) => {
+            db.query(`SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'usuario' AND COLUMN_NAME = ?`, [col], (err, rows) => {
+                if (err || rows.length > 0) return;
+                db.query(`ALTER TABLE usuario ADD COLUMN ${col} ${tipo}`, () => {});
+            });
+        };
+        agregarColumna('email', 'VARCHAR(255)');
+        agregarColumna('codigo_recuperacion', 'VARCHAR(255)');
+        agregarColumna('codigo_expira', 'DATETIME');
 
         // Si no hay usuario, crea uno por defecto
         db.query('SELECT COUNT(*) as total FROM usuario', (err, res) => {
@@ -168,7 +174,6 @@ app.post('/api/recuperar', (req, res) => {
         );
     });
 });
-
 
 // Cambiar contraseña (autenticado)
 app.post('/api/cambiar-password', verificarToken, (req, res) => {
