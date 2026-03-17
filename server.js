@@ -10,10 +10,12 @@ const JWT_SECRET = process.env.JWT_SECRET || 'clave_secreta_electricidad_2024';
 
 // Configuración de email
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
     auth: {
         user: 'gabriel19soto00@gmail.com',
-        pass: process.env.GMAIL_APP_PASSWORD || 'znohxrldqekdsbst'
+        pass: process.env.GMAIL_APP_PASSWORD || 'mlrwwzhehkziuxfp'
     }
 });
 
