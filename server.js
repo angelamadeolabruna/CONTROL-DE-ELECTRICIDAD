@@ -12,7 +12,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'clave_secreta_electricidad_2024';
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'gabriel19soto@gmail.com',
+        user: 'gabriel19soto00@gmail.com',
         pass: process.env.GMAIL_APP_PASSWORD || 'znohxrldqekdsbst'
     }
 });
@@ -71,7 +71,7 @@ function crearTablaUsuario() {
             const passwordHash = bcrypt.hashSync('admin1234', 10);
             db.query(
                 'INSERT INTO usuario (username, password_hash, email) VALUES (?, ?, ?)',
-                ['admin', passwordHash, 'gabriel19soto@gmail.com'],
+                ['admin', passwordHash, 'gabriel19soto00@gmail.com'],
                 () => console.log('Usuario por defecto creado ✅ user: admin | pass: admin1234')
             );
         });
@@ -91,6 +91,17 @@ function verificarToken(req, res, next) {
         res.status(401).json({ error: 'Token inválido o expirado' });
     }
 }
+
+// Corregir email del admin (eliminar después de usar)
+app.get('/api/fix-email', (req, res) => {
+    db.query(
+        "UPDATE usuario SET email = 'gabriel19soto00@gmail.com' WHERE username = 'admin'",
+        (err, result) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ ok: true, mensaje: '✅ Email actualizado a gabriel19soto00@gmail.com' });
+        }
+    );
+});
 
 // ── AUTH ROUTES ──
 
@@ -124,7 +135,7 @@ app.post('/api/solicitar-recuperacion', (req, res) => {
                 if (err) return res.status(500).json({ error: 'Error interno' });
 
                 const mailOptions = {
-                    from: 'gabriel19soto@gmail.com',
+                    from: 'gabriel19soto00@gmail.com',
                     to: email,
                     subject: 'Código de recuperación - Control de Electricidad',
                     html: `
