@@ -100,6 +100,17 @@ app.post('/api/login', (req, res) => {
     });
 });
 
+// Endpoint temporal para arreglar columna NOT NULL (eliminar después de usar)
+app.get('/api/fix-null', (req, res) => {
+    db.query("ALTER TABLE usuario MODIFY COLUMN codigo_recuperacion VARCHAR(255) NULL", (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        db.query("ALTER TABLE usuario MODIFY COLUMN codigo_expira DATETIME NULL", (err2) => {
+            if (err2) return res.status(500).json({ error: err2.message });
+            res.json({ ok: true, mensaje: '✅ Columnas actualizadas para permitir NULL' });
+        });
+    });
+});
+
 // Endpoint temporal para arreglar columnas (eliminar después de usar)
 app.get('/api/fix-columnas', (req, res) => {
     const pasos = [];
