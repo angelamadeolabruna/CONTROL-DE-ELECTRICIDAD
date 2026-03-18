@@ -574,6 +574,89 @@
         #pantalla-login, #pantalla-recuperar { position: relative; }
         .login-card { position: relative; z-index: 1; }
 
+        /* ── GRÁFICO ── */
+        .tabla-grafico-wrap {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+            align-items: start;
+        }
+
+        .grafico-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.25rem 1.4rem;
+            box-shadow: var(--shadow);
+        }
+
+        .grafico-title {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .grafico-canvas-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+        }
+
+        .grafico-legend {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.78rem;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .legend-nombre {
+            flex: 1;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .legend-pct {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .grafico-empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: var(--text-muted);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        @media (max-width: 700px) {
+            .tabla-grafico-wrap { grid-template-columns: 1fr; }
+        }
+
         .header-bolt {
             display: inline-block;
             vertical-align: middle;
@@ -703,6 +786,7 @@
         📟 Ingresá la <strong>lectura actual del medidor</strong> de cada tienda. El sistema calcula automáticamente los kWh consumidos restando la lectura anterior.
     </div>
 
+    <div class="tabla-grafico-wrap">
     <div class="table-wrap">
         <table>
             <thead>
@@ -720,6 +804,17 @@
             </tbody>
         </table>
     </div>
+
+    <!-- GRÁFICO DE TORTA -->
+    <div class="grafico-card">
+        <div class="grafico-title">⚡ Consumo por tienda</div>
+        <div class="grafico-canvas-wrap">
+            <canvas id="graficoPie"></canvas>
+        </div>
+        <div class="grafico-legend" id="graficoPieLeyenda"></div>
+    </div>
+
+    </div><!-- fin tabla-grafico-wrap -->
 
     <button class="btn-guardar" onclick="guardarMes()">💾 Guardar mes</button>
 
@@ -773,6 +868,7 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
     const PRECIO_KWH = 2;
     let cantidadTiendas = 6;
@@ -989,6 +1085,8 @@
         document.getElementById('res-kwh').textContent = totalKwh.toFixed(1);
         document.getElementById('res-prom').textContent = tiendas > 0 ? (totalGeneral / tiendas).toFixed(2) + ' Bs' : '0 Bs';
 
+        actualizarGrafico(filas);
+
         filas.sort((a, b) => b.kwh - a.kwh);
         document.getElementById('reporte').innerHTML = filas.map((f, rank) => `
             <div class="reporte-item">
@@ -998,6 +1096,73 @@
                 <span class="reporte-monto">${f.monto === 0 ? '— Bs' : f.monto.toFixed(2) + ' Bs'}</span>
             </div>
         `).join('');
+    }
+
+    // ── GRÁFICO ──
+    let pieChart = null;
+    const COLORES = [
+        '#f0a500','#1a7a3a','#2563eb','#d63b2f','#7c3aed',
+        '#0891b2','#ea580c','#65a30d','#db2777','#854d0e',
+        '#0f766e','#4338ca'
+    ];
+
+    function actualizarGrafico(filas) {
+        const conDatos = filas.filter(f => f.kwh > 0);
+        const canvas = document.getElementById('graficoPie');
+        const leyenda = document.getElementById('graficoPieLeyenda');
+
+        if (conDatos.length === 0) {
+            if (pieChart) { pieChart.destroy(); pieChart = null; }
+            canvas.style.display = 'none';
+            leyenda.innerHTML = '<div class="grafico-empty">Sin datos aún</div>';
+            return;
+        }
+
+        canvas.style.display = 'block';
+        const totalKwh = conDatos.reduce((s, f) => s + f.kwh, 0);
+        const labels = conDatos.map(f => f.nombre);
+        const data = conDatos.map(f => parseFloat(f.kwh.toFixed(1)));
+        const colors = conDatos.map((_, i) => COLORES[i % COLORES.length]);
+
+        if (pieChart) pieChart.destroy();
+        pieChart = new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+                labels,
+                datasets: [{
+                    data,
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => {
+                                const pct = ((ctx.parsed / totalKwh) * 100).toFixed(1);
+                                return ` ${ctx.parsed} kWh (${pct}%)`;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+
+        leyenda.innerHTML = conDatos.map((f, i) => {
+            const pct = ((f.kwh / totalKwh) * 100).toFixed(1);
+            return `
+                <div class="legend-item">
+                    <div class="legend-dot" style="background:${COLORES[i % COLORES.length]}"></div>
+                    <span class="legend-nombre">${f.nombre}</span>
+                    <span class="legend-pct">${pct}%</span>
+                </div>
+            `;
+        }).join('');
     }
 
     async function cargarLecturasAnteriores() {
