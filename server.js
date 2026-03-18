@@ -100,35 +100,6 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// Endpoint temporal para arreglar columna NOT NULL (eliminar después de usar)
-app.get('/api/fix-null', (req, res) => {
-    db.query("ALTER TABLE usuario MODIFY COLUMN codigo_recuperacion VARCHAR(255) NULL", (err) => {
-        if (err) return res.status(500).json({ error: err.message });
-        db.query("ALTER TABLE usuario MODIFY COLUMN codigo_expira DATETIME NULL", (err2) => {
-            if (err2) return res.status(500).json({ error: err2.message });
-            res.json({ ok: true, mensaje: '✅ Columnas actualizadas para permitir NULL' });
-        });
-    });
-});
-
-// Endpoint temporal para arreglar columnas (eliminar después de usar)
-app.get('/api/fix-columnas', (req, res) => {
-    const pasos = [];
-    db.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'usuario' AND COLUMN_NAME = 'codigo_recuperacion'", (err, rows) => {
-        if (rows.length === 0) {
-            db.query("ALTER TABLE usuario ADD COLUMN codigo_recuperacion VARCHAR(255)", (err) => {
-                pasos.push(err ? 'Error codigo_recuperacion: ' + err.message : 'codigo_recuperacion agregada ✅');
-                db.query("ALTER TABLE usuario ADD COLUMN codigo_expira DATETIME", (err) => {
-                    pasos.push(err ? 'Error codigo_expira: ' + err.message : 'codigo_expira agregada ✅');
-                    res.json({ pasos });
-                });
-            });
-        } else {
-            res.json({ mensaje: 'Las columnas ya existen ✅', pasos });
-        }
-    });
-});
-
 app.post('/api/solicitar-recuperacion', (req, res) => {
     const { email } = req.body;
     db.query('SELECT * FROM usuario WHERE email = ?', [email], (err, rows) => {
@@ -162,19 +133,15 @@ app.post('/api/solicitar-recuperacion', (req, res) => {
 
 app.post('/api/recuperar', (req, res) => {
     const { email, codigo, nueva_password } = req.body;
-    console.log('Recuperar intento:', { email, codigo });
     db.query('SELECT * FROM usuario WHERE email = ?', [email], (err, rows) => {
-        if (err) { console.log('Error DB:', err); return res.status(400).json({ error: 'Error interno' }); }
-        if (rows.length === 0) { console.log('Usuario no encontrado:', email); return res.status(400).json({ error: 'Error interno' }); }
+        if (err || rows.length === 0) return res.status(400).json({ error: 'Error interno' });
         const user = rows[0];
-        console.log('Usuario encontrado, codigo_recuperacion:', user.codigo_recuperacion, 'expira:', user.codigo_expira);
         if (!user.codigo_recuperacion) return res.status(401).json({ error: 'No hay código activo. Solicitá uno nuevo.' });
-        if (user.codigo_recuperacion !== codigo) { console.log('Código incorrecto. Esperado:', user.codigo_recuperacion, 'Recibido:', codigo); return res.status(401).json({ error: 'Código incorrecto' }); }
-        if (new Date() > new Date(user.codigo_expira)) { console.log('Código expirado'); return res.status(401).json({ error: 'El código expiró. Solicitá uno nuevo.' }); }
+        if (user.codigo_recuperacion !== codigo) return res.status(401).json({ error: 'Código incorrecto' });
+        if (new Date() > new Date(user.codigo_expira)) return res.status(401).json({ error: 'El código expiró. Solicitá uno nuevo.' });
         const nuevoHash = bcrypt.hashSync(nueva_password, 10);
         db.query('UPDATE usuario SET password_hash = ?, codigo_recuperacion = NULL, codigo_expira = NULL WHERE id = ?', [nuevoHash, user.id], (err) => {
-            if (err) { console.log('Error actualizando:', err); return res.status(500).json({ error: 'Error actualizando contraseña' }); }
-            console.log('Contraseña actualizada ✅');
+            if (err) return res.status(500).json({ error: 'Error actualizando contraseña' });
             res.json({ mensaje: 'Contraseña actualizada ✅' });
         });
     });
