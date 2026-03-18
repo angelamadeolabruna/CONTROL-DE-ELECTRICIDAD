@@ -100,6 +100,24 @@ app.post('/api/login', (req, res) => {
     });
 });
 
+// Endpoint temporal para arreglar columnas (eliminar después de usar)
+app.get('/api/fix-columnas', (req, res) => {
+    const pasos = [];
+    db.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'usuario' AND COLUMN_NAME = 'codigo_recuperacion'", (err, rows) => {
+        if (rows.length === 0) {
+            db.query("ALTER TABLE usuario ADD COLUMN codigo_recuperacion VARCHAR(255)", (err) => {
+                pasos.push(err ? 'Error codigo_recuperacion: ' + err.message : 'codigo_recuperacion agregada ✅');
+                db.query("ALTER TABLE usuario ADD COLUMN codigo_expira DATETIME", (err) => {
+                    pasos.push(err ? 'Error codigo_expira: ' + err.message : 'codigo_expira agregada ✅');
+                    res.json({ pasos });
+                });
+            });
+        } else {
+            res.json({ mensaje: 'Las columnas ya existen ✅', pasos });
+        }
+    });
+});
+
 app.post('/api/solicitar-recuperacion', (req, res) => {
     const { email } = req.body;
     db.query('SELECT * FROM usuario WHERE email = ?', [email], (err, rows) => {
