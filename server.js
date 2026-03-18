@@ -151,15 +151,19 @@ app.post('/api/solicitar-recuperacion', (req, res) => {
 
 app.post('/api/recuperar', (req, res) => {
     const { email, codigo, nueva_password } = req.body;
+    console.log('Recuperar intento:', { email, codigo });
     db.query('SELECT * FROM usuario WHERE email = ?', [email], (err, rows) => {
-        if (err || rows.length === 0) return res.status(400).json({ error: 'Error interno' });
+        if (err) { console.log('Error DB:', err); return res.status(400).json({ error: 'Error interno' }); }
+        if (rows.length === 0) { console.log('Usuario no encontrado:', email); return res.status(400).json({ error: 'Error interno' }); }
         const user = rows[0];
+        console.log('Usuario encontrado, codigo_recuperacion:', user.codigo_recuperacion, 'expira:', user.codigo_expira);
         if (!user.codigo_recuperacion) return res.status(401).json({ error: 'No hay código activo. Solicitá uno nuevo.' });
-        if (user.codigo_recuperacion !== codigo) return res.status(401).json({ error: 'Código incorrecto' });
-        if (new Date() > new Date(user.codigo_expira)) return res.status(401).json({ error: 'El código expiró. Solicitá uno nuevo.' });
+        if (user.codigo_recuperacion !== codigo) { console.log('Código incorrecto. Esperado:', user.codigo_recuperacion, 'Recibido:', codigo); return res.status(401).json({ error: 'Código incorrecto' }); }
+        if (new Date() > new Date(user.codigo_expira)) { console.log('Código expirado'); return res.status(401).json({ error: 'El código expiró. Solicitá uno nuevo.' }); }
         const nuevoHash = bcrypt.hashSync(nueva_password, 10);
         db.query('UPDATE usuario SET password_hash = ?, codigo_recuperacion = NULL, codigo_expira = NULL WHERE id = ?', [nuevoHash, user.id], (err) => {
-            if (err) return res.status(500).json({ error: 'Error actualizando contraseña' });
+            if (err) { console.log('Error actualizando:', err); return res.status(500).json({ error: 'Error actualizando contraseña' }); }
+            console.log('Contraseña actualizada ✅');
             res.json({ mensaje: 'Contraseña actualizada ✅' });
         });
     });
