@@ -540,13 +540,68 @@
         }
 
         .btn-confirmar:hover { background: var(--green); }
+
+        /* ── RAYO DECORATIVO ── */
+        .login-bolt {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .bolt-svg {
+            width: 52px;
+            height: 52px;
+            filter: drop-shadow(0 0 8px rgba(240, 165, 0, 0.5));
+            animation: bolt-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes bolt-pulse {
+            0%, 100% { filter: drop-shadow(0 0 6px rgba(240, 165, 0, 0.4)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 18px rgba(240, 165, 0, 0.95)); transform: scale(1.1); }
+        }
+
+        .login-bg-pattern {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(240,165,0,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(240,165,0,0.04) 0%, transparent 50%);
+        }
+
+        #pantalla-login, #pantalla-recuperar { position: relative; }
+        .login-card { position: relative; z-index: 1; }
+
+        .header-bolt {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 0.4rem;
+            animation: bolt-pulse 2.5s ease-in-out infinite;
+            position: relative;
+            top: -2px;
+        }
     </style>
 </head>
 <body>
 
 <!-- ══ PANTALLA LOGIN ══ -->
 <div id="pantalla-login">
+    <div class="login-bg-pattern"></div>
     <div class="login-card">
+        <div class="login-bolt">
+            <svg class="bolt-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="28,4 12,26 22,26 20,44 36,22 26,22" fill="#f0a500" stroke="#c88500" stroke-width="1.5" stroke-linejoin="round"/>
+                <polygon points="28,4 12,26 22,26 20,44 36,22 26,22" fill="url(#boltGrad)" opacity="0.8"/>
+                <defs>
+                    <linearGradient id="boltGrad" x1="12" y1="4" x2="36" y2="44" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#ffe066"/>
+                        <stop offset="100%" stop-color="#f0a500"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
         <div class="login-title">Control de<br>Electricidad</div>
         <div class="login-subtitle">Casa de Rojas Halan · Acceso privado</div>
 
@@ -572,6 +627,11 @@
 
         <!-- PASO 1: Pedir correo -->
         <div id="rec-paso1">
+            <div class="login-bolt">
+                <svg class="bolt-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="28,4 12,26 22,26 20,44 36,22 26,22" fill="#f0a500" stroke="#c88500" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+            </div>
             <div class="login-title">Recuperar<br>Acceso</div>
             <div class="login-subtitle">Ingresá tu correo y te enviamos un código</div>
             <div class="login-field">
@@ -613,7 +673,12 @@
 
     <div class="header">
         <div class="header-left">
-            <h1>Control de<br>Electricidad</h1>
+            <h1>
+                <span class="header-bolt">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="28,4 12,26 22,26 20,44 36,22 26,22" fill="#f0a500" stroke="#c88500" stroke-width="1" stroke-linejoin="round"/>
+                    </svg>
+                </span>Control de<br>Electricidad</h1>
             <div class="subtitle">Sistema de gestión de consumo &nbsp;·&nbsp; Casa de Rojas Halan</div>
         </div>
         <div class="header-right">
