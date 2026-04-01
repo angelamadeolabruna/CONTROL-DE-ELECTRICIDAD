@@ -214,9 +214,10 @@
 
         .precio-badge .valor {
             font-family: 'Syne', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1rem;
             font-weight: 700;
             color: var(--accent);
+            line-height: 1.2;
         }
 
         .btn-salir {
@@ -766,8 +767,8 @@
         </div>
         <div class="header-right">
             <div class="precio-badge">
-                <span class="label">Precio kWh</span>
-                <span class="valor">2.00 Bs</span>
+                <span class="label">Tarifa CRE · Domiciliaria</span>
+                <span class="valor">Escalonada</span>
             </div>
             <button class="btn-salir" onclick="cerrarSesion()">🔒 Cerrar sesión</button>
             <button class="btn-salir" onclick="abrirModalPassword()" style="border-color: var(--border-strong);">🔑 Cambiar contraseña</button>
@@ -783,7 +784,7 @@
     </div>
 
     <div class="info-box">
-        📟 Ingresá la <strong>lectura actual del medidor</strong> de cada tienda. El sistema calcula automáticamente los kWh consumidos restando la lectura anterior.
+        📟 Ingresá la <strong>lectura actual del medidor</strong> de cada tienda. El sistema calcula automáticamente los kWh consumidos y aplica la <strong>tarifa escalonada oficial CRE Santa Cruz</strong>.
     </div>
 
     <div class="tabla-grafico-wrap">
@@ -870,7 +871,17 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-    const PRECIO_KWH = 2;
+    // Tarifa escalonada CRE Santa Cruz - Categoría Domiciliaria
+    function calcularTarifaCRE(kwh) {
+        if (kwh <= 0) return 0;
+        if (kwh <= 15) return 13.73;   // cargo mínimo fijo
+        if (kwh <= 120) return kwh * 0.758;
+        if (kwh <= 300) return kwh * 0.969;
+        if (kwh <= 500) return kwh * 1.020;
+        if (kwh <= 1000) return kwh * 1.068;
+        return kwh * 1.479;
+    }
+
     let cantidadTiendas = 6;
     let lecturasAnteriores = {};
     let TOKEN = localStorage.getItem('token_electricidad') || '';
@@ -914,7 +925,6 @@
             });
             const data = await res.json();
             if (!res.ok) { errEl.textContent = data.error; return; }
-            // Mostrar paso 2
             document.getElementById('rec-paso1').style.display = 'none';
             document.getElementById('rec-paso2').style.display = 'block';
         } catch {
@@ -1068,7 +1078,7 @@
             const nombre = nombreEl ? nombreEl.textContent.trim() : `Tienda ${i}`;
             const lecturaAnterior = lecturasAnteriores[nombre] || 0;
             const kwh = Math.max(0, lecturaActual - lecturaAnterior);
-            const total = kwh * PRECIO_KWH;
+            const total = calcularTarifaCRE(kwh);
 
             document.getElementById(`kwh-${i}`).textContent = kwh.toFixed(1) + ' kWh';
             document.getElementById(`total-${i}`).textContent = total.toFixed(2) + ' Bs';
@@ -1229,7 +1239,6 @@
     document.getElementById('mes-input').value =
         hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0');
 
-    // Verifica si ya tiene token válido
     if (TOKEN && TOKEN.length > 10) {
         mostrarApp();
     } else {

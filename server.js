@@ -30,6 +30,17 @@ async function enviarEmail(to, subject, html) {
     return res.json();
 }
 
+// Tarifa escalonada CRE Santa Cruz - Categoría Domiciliaria (D-PD-BT)
+function calcularTarifaCRE(kwh) {
+    if (kwh <= 0) return 0;
+    if (kwh <= 15) return 13.73; // cargo mínimo fijo
+    if (kwh <= 120) return kwh * 0.758;
+    if (kwh <= 300) return kwh * 0.969;
+    if (kwh <= 500) return kwh * 1.020;
+    if (kwh <= 1000) return kwh * 1.068;
+    return kwh * 1.479;
+}
+
 app.use(express.json());
 app.use(express.static('./'));
 
@@ -174,8 +185,7 @@ app.post('/api/guardar', verificarToken, (req, res) => {
         if (err) return res.json({ error: err });
         let lecturaAnterior = resultados.length > 0 ? parseFloat(resultados[0].lectura) : 0;
         let kwh = Math.max(0, lectura - lecturaAnterior);
-        const PRECIO_KWH = 2;
-        const total = kwh * PRECIO_KWH;
+        const total = calcularTarifaCRE(kwh);
         db.query('SELECT id FROM registros WHERE tienda = ? AND mes = ?', [tienda, mes], (err, existe) => {
             if (err) return res.json({ error: err });
             if (existe.length > 0) {
