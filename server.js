@@ -34,20 +34,20 @@ app.use(express.json());
 app.use(express.static('./'));
 
 const db = mysql.createConnection({
-    host: process.env.MYSQLHOST || 'localhost',
-    user: process.env.MYSQLUSER || 'pablo',
-    password: process.env.MYSQLPASSWORD || '1234',
-    database: process.env.MYSQLDATABASE || 'control_electricidad',
-    port: process.env.MYSQLPORT || 3306
+    host: process.env.MYSQLHOST || '50412o.h.filess.io',
+    user: process.env.MYSQLUSER || 'control_electricidad_hotdetail',
+    password: process.env.MYSQLPASSWORD || '92591b731b32a07875a4e1cf51da61f6ccbc3ee3',
+    database: process.env.MYSQLDATABASE || 'control_electricidad_hotdetail',
+    port: process.env.MYSQLPORT || 3307
 });
 
 db.connect((err) => {
     if (err) { console.log('Error conectando a MySQL:', err); }
-    else { console.log('Conectado a MySQL ✅'); crearTablaUsuario(); }
+    else { console.log('Conectado a MySQL ✅'); crearTablas(); }
 });
 
-function crearTablaUsuario() {
-    const sql = `
+function crearTablas() {
+    const sqlUsuario = `
         CREATE TABLE IF NOT EXISTS usuario (
             id INT AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(100) NOT NULL,
@@ -58,23 +58,29 @@ function crearTablaUsuario() {
             creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     `;
-    db.query(sql, (err) => {
+    const sqlRegistros = `
+        CREATE TABLE IF NOT EXISTS registros (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            tienda VARCHAR(100) NOT NULL,
+            lectura DECIMAL(10,2) NOT NULL,
+            kwh DECIMAL(10,2) NOT NULL,
+            total DECIMAL(10,2) NOT NULL,
+            mes VARCHAR(7) NOT NULL,
+            creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    `;
+    db.query(sqlUsuario, (err) => {
         if (err) { console.log('Error creando tabla usuario:', err); return; }
-        const agregarColumna = (col, tipo) => {
-            db.query(`SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'usuario' AND COLUMN_NAME = ?`, [col], (err, rows) => {
-                if (err || rows.length > 0) return;
-                db.query(`ALTER TABLE usuario ADD COLUMN ${col} ${tipo}`, () => {});
+        db.query(sqlRegistros, (err) => {
+            if (err) { console.log('Error creando tabla registros:', err); return; }
+            console.log('Tablas listas ✅');
+            db.query('SELECT COUNT(*) as total FROM usuario', (err, res) => {
+                if (err || res[0].total > 0) return;
+                const passwordHash = bcrypt.hashSync('admin1234', 10);
+                db.query('INSERT INTO usuario (username, password_hash, email) VALUES (?, ?, ?)',
+                    ['admin', passwordHash, 'gabriel19soto00@gmail.com'],
+                    () => console.log('Usuario admin creado ✅'));
             });
-        };
-        agregarColumna('email', 'VARCHAR(255)');
-        agregarColumna('codigo_recuperacion', 'VARCHAR(255)');
-        agregarColumna('codigo_expira', 'DATETIME');
-        db.query('SELECT COUNT(*) as total FROM usuario', (err, res) => {
-            if (err || res[0].total > 0) return;
-            const passwordHash = bcrypt.hashSync('admin1234', 10);
-            db.query('INSERT INTO usuario (username, password_hash, email) VALUES (?, ?, ?)',
-                ['admin', passwordHash, 'gabriel19soto00@gmail.com'],
-                () => console.log('Usuario por defecto creado ✅'));
         });
     });
 }
