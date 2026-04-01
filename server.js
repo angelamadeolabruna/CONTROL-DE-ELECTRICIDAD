@@ -86,11 +86,19 @@ function crearTablas() {
             if (err) { console.log('Error creando tabla registros:', err); return; }
             console.log('Tablas listas ✅');
             db.query('SELECT COUNT(*) as total FROM usuario', (err, res) => {
-                if (err || res[0].total > 0) return;
+                if (err) return;
                 const passwordHash = bcrypt.hashSync('admin1234', 10);
-                db.query('INSERT INTO usuario (username, password_hash, email) VALUES (?, ?, ?)',
-                    ['admin', passwordHash, 'gabriel19soto00@gmail.com'],
-                    () => console.log('Usuario admin creado ✅'));
+                if (res[0].total === 0) {
+                    // Crear usuario admin por primera vez
+                    db.query('INSERT INTO usuario (username, password_hash, email) VALUES (?, ?, ?)',
+                        ['admin', passwordHash, 'gabriel19soto00@gmail.com'],
+                        () => console.log('Usuario admin creado ✅'));
+                } else {
+                    // Siempre resetear la contraseña a admin1234 al arrancar
+                    db.query('UPDATE usuario SET password_hash = ? WHERE username = ?',
+                        [passwordHash, 'admin'],
+                        () => console.log('Contraseña admin reseteada a admin1234 ✅'));
+                }
             });
         });
     });
