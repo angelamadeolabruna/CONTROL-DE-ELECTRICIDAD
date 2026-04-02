@@ -1,90 +1,129 @@
 <!DOCTYPE html>
+<!-- DOCTYPE: Le dice al navegador que este es un documento HTML5 (la versión moderna) -->
+
 <html lang="es">
+<!-- html: La etiqueta raíz que envuelve TODO el contenido de la página -->
+<!-- lang="es": Le dice al navegador que el idioma es español -->
+
 <head>
+<!-- head: Contiene información de configuración de la página (no se ve en pantalla) -->
+
     <meta charset="UTF-8">
+    <!-- charset UTF-8: Permite usar caracteres especiales como tildes (á, é, ñ) -->
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- viewport: Hace que la página se vea bien en celulares y tablets -->
+    <!-- width=device-width: el ancho se adapta al ancho del dispositivo -->
+    <!-- initial-scale=1.0: sin zoom inicial -->
+
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <!-- Carga 3 fuentes tipográficas desde Google Fonts: -->
+    <!-- DM Sans: fuente principal del texto (cuerpo) -->
+    <!-- DM Mono: fuente monoespaciada para números y etiquetas técnicas -->
+    <!-- Syne: fuente de los títulos grandes (en negrita) -->
+
     <title>CONTROL DE ELECTRICIDAD</title>
+    <!-- title: El texto que aparece en la pestaña del navegador -->
+
     <style>
+    /* ============================================================
+       CSS — LOS ESTILOS VISUALES DE TODA LA PÁGINA
+       CSS define colores, tamaños, posiciones, animaciones, etc.
+       ============================================================ */
+
         :root {
-            --bg: #f8f8f6;
-            --surface: #ffffff;
-            --border: #e8e8e4;
-            --border-strong: #d0d0ca;
-            --text: #111110;
-            --text-muted: #888884;
-            --accent: #f0a500;
-            --accent-dark: #c88500;
-            --green: #1a7a3a;
-            --green-light: #e8f5ec;
-            --red: #d63b2f;
-            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-            --shadow-md: 0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.06);
+            /* :root define variables globales de CSS (como constantes) */
+            /* Así podemos reusar los mismos colores en todo el archivo */
+
+            --bg: #f8f8f6;          /* Color de fondo general (blanco hueso) */
+            --surface: #ffffff;     /* Color de las tarjetas y paneles (blanco puro) */
+            --border: #e8e8e4;      /* Color de bordes suaves */
+            --border-strong: #d0d0ca; /* Color de bordes más marcados */
+            --text: #111110;        /* Color del texto principal (casi negro) */
+            --text-muted: #888884;  /* Color del texto secundario (gris) */
+            --accent: #f0a500;      /* Color de acento: amarillo/dorado (el rayo) */
+            --accent-dark: #c88500; /* Versión más oscura del acento */
+            --green: #1a7a3a;       /* Verde para los totales y montos */
+            --green-light: #e8f5ec; /* Verde claro para fondos */
+            --red: #d63b2f;         /* Rojo para errores */
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);    /* Sombra suave */
+            --shadow-md: 0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.06); /* Sombra mediana */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* * afecta a TODOS los elementos */
+        /* box-sizing border-box: el tamaño incluye el borde y padding (más predecible) */
+        /* margin/padding 0: elimina espacios por defecto del navegador */
 
         body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 2.5rem 1.5rem;
+            font-family: 'DM Sans', sans-serif; /* Fuente principal de todo el texto */
+            background: var(--bg);              /* Fondo general de la página */
+            color: var(--text);                 /* Color del texto */
+            min-height: 100vh;                  /* Mínimo 100% del alto de la pantalla */
+            padding: 2.5rem 1.5rem;             /* Espacio interno (arriba/abajo y lados) */
         }
 
-        /* ── LOGIN ── */
+        /* ══════════════════════════════════════
+           ESTILOS DE LA PANTALLA DE LOGIN
+           ══════════════════════════════════════ */
+
         #pantalla-login {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            display: flex;              /* Usa flexbox para centrar el contenido */
+            align-items: center;        /* Centra verticalmente */
+            justify-content: center;    /* Centra horizontalmente */
+            min-height: 100vh;          /* Ocupa toda la altura de la pantalla */
             padding: 1.5rem;
-            margin: -2.5rem -1.5rem;
+            margin: -2.5rem -1.5rem;    /* Compensa el padding del body */
             background: var(--bg);
         }
 
         .login-card {
+            /* La tarjeta blanca del formulario de login */
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 2.5rem 2rem;
+            border-radius: 20px;        /* Esquinas redondeadas */
+            padding: 2.5rem 2rem;       /* Espacio interno */
             width: 100%;
-            max-width: 380px;
-            box-shadow: var(--shadow-md);
+            max-width: 380px;           /* Máximo 380px de ancho */
+            box-shadow: var(--shadow-md); /* Sombra para dar profundidad */
         }
 
         .login-title {
+            /* Título grande "Control de Electricidad" en el login */
             font-family: 'Syne', sans-serif;
             font-size: 1.8rem;
             font-weight: 800;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.03em;    /* Letras un poco más juntas */
             margin-bottom: 0.3rem;
         }
 
         .login-subtitle {
+            /* Subtítulo pequeño "Casa de Rojas Halan · Acceso privado" */
             font-family: 'DM Mono', monospace;
             font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+            text-transform: uppercase;  /* Todo en mayúsculas */
+            letter-spacing: 0.1em;      /* Letras más separadas */
             color: var(--text-muted);
             margin-bottom: 2rem;
         }
 
         .login-field {
-            margin-bottom: 1rem;
+            margin-bottom: 1rem; /* Espacio entre campos del formulario */
         }
 
         .login-field label {
+            /* Etiquetas "USUARIO" y "CONTRASEÑA" */
             font-family: 'DM Mono', monospace;
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             color: var(--text-muted);
-            display: block;
+            display: block;             /* Ocupa toda la línea */
             margin-bottom: 0.4rem;
         }
 
         .login-field input {
+            /* Los campos de texto del formulario */
             width: 100%;
             padding: 0.65rem 0.9rem;
             border: 1.5px solid var(--border-strong);
@@ -93,19 +132,21 @@
             font-size: 0.95rem;
             color: var(--text);
             background: var(--bg);
-            transition: border-color 0.15s;
+            transition: border-color 0.15s; /* Transición suave al enfocar */
         }
 
         .login-field input:focus {
-            outline: none;
-            border-color: var(--accent);
+            /* Cuando el usuario hace clic en el campo */
+            outline: none;              /* Elimina el borde azul por defecto del navegador */
+            border-color: var(--accent); /* Borde amarillo al enfocar */
             background: white;
         }
 
         .btn-login {
+            /* Botón "ENTRAR" del login */
             width: 100%;
             padding: 0.75rem;
-            background: var(--text);
+            background: var(--text);    /* Fondo negro */
             color: white;
             border: none;
             border-radius: 9px;
@@ -119,16 +160,19 @@
         }
 
         .btn-login:hover { background: var(--accent); color: var(--text); }
+        /* Al pasar el mouse: fondo amarillo, texto negro */
 
         .login-error {
+            /* Mensaje de error debajo del botón de login */
             color: var(--red);
             font-size: 0.82rem;
             margin-top: 0.75rem;
             text-align: center;
-            min-height: 1.2em;
+            min-height: 1.2em; /* Reserva espacio aunque no haya error */
         }
 
         .link-recuperar {
+            /* Link "¿Olvidaste tu contraseña?" */
             display: block;
             text-align: center;
             margin-top: 1.25rem;
@@ -143,9 +187,13 @@
 
         .link-recuperar:hover { color: var(--accent); }
 
-        /* ── RECUPERAR ── */
+        /* ══════════════════════════════════════
+           PANTALLA RECUPERAR CONTRASEÑA
+           (inicialmente oculta, display:none)
+           ══════════════════════════════════════ */
+
         #pantalla-recuperar {
-            display: none;
+            display: none;              /* OCULTA por defecto */
             align-items: center;
             justify-content: center;
             min-height: 100vh;
@@ -154,22 +202,28 @@
             background: var(--bg);
         }
 
-        /* ── APP ── */
-        #pantalla-app { display: none; }
+        /* ══════════════════════════════════════
+           PANTALLA PRINCIPAL DE LA APP
+           (inicialmente oculta, display:none)
+           ══════════════════════════════════════ */
+
+        #pantalla-app { display: none; } /* OCULTA por defecto hasta que se loguee */
 
         .page { max-width: 960px; margin: 0 auto; }
+        /* Centra el contenido y lo limita a 960px de ancho */
 
-        /* ── HEADER ── */
+        /* ── HEADER (la barra superior con el título) ── */
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* Título a la izq, botones a la der */
             align-items: flex-start;
             margin-bottom: 2.5rem;
             padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border); /* Línea divisora abajo */
         }
 
         .header-left h1 {
+            /* Título "Control de Electricidad" con el rayo */
             font-family: 'Syne', sans-serif;
             font-weight: 800;
             font-size: 2.6rem;
@@ -179,6 +233,7 @@
         }
 
         .header-left .subtitle {
+            /* "Sistema de gestión de consumo · Casa de Rojas Halan" */
             font-size: 0.8rem;
             font-family: 'DM Mono', monospace;
             color: var(--text-muted);
@@ -188,13 +243,15 @@
         }
 
         .header-right {
+            /* Columna derecha: badge de tarifa + botones */
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
+            flex-direction: column;     /* Apila los elementos verticalmente */
+            align-items: flex-end;      /* Alineados a la derecha */
             gap: 0.5rem;
         }
 
         .precio-badge {
+            /* El badge negro que dice "Tarifa CRE · Domiciliaria / Escalonada" */
             background: var(--text);
             color: white;
             padding: 0.75rem 1.25rem;
@@ -203,6 +260,7 @@
         }
 
         .precio-badge .label {
+            /* Texto pequeño "TARIFA CRE · DOMICILIARIA" */
             font-family: 'DM Mono', monospace;
             font-size: 0.6rem;
             text-transform: uppercase;
@@ -213,6 +271,7 @@
         }
 
         .precio-badge .valor {
+            /* Texto dorado grande "Escalonada" */
             font-family: 'Syne', sans-serif;
             font-size: 1rem;
             font-weight: 700;
@@ -221,6 +280,7 @@
         }
 
         .btn-salir {
+            /* Botones pequeños "Cerrar sesión" y "Cambiar contraseña" */
             font-family: 'DM Mono', monospace;
             font-size: 0.62rem;
             text-transform: uppercase;
@@ -235,17 +295,19 @@
         }
 
         .btn-salir:hover { border-color: var(--red); color: var(--red); }
+        /* Al hover: borde y texto rojos */
 
-        /* ── CONTROLS ── */
+        /* ── CONTROLES: selector de mes y botones ── */
         .controls {
             display: flex;
             align-items: center;
             gap: 1rem;
             margin-bottom: 1rem;
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* En pantallas chicas, los elementos se apilan */
         }
 
         .mes-label {
+            /* Etiqueta "MES DE COBRO:" */
             font-family: 'DM Mono', monospace;
             font-size: 0.7rem;
             text-transform: uppercase;
@@ -254,6 +316,7 @@
         }
 
         .mes-input {
+            /* El selector de mes (input type="month") */
             font-family: 'DM Mono', monospace;
             font-size: 0.85rem;
             border: 1.5px solid var(--border-strong);
@@ -268,8 +331,10 @@
         .mes-input:focus { outline: none; border-color: var(--accent); }
 
         .spacer { flex: 1; }
+        /* Empuja los botones "+ Agregar tienda" y "Limpiar" hacia la derecha */
 
         .btn {
+            /* Estilo base para botones generales */
             font-family: 'DM Mono', monospace;
             font-size: 0.72rem;
             text-transform: uppercase;
@@ -282,6 +347,7 @@
         }
 
         .btn-primary {
+            /* Botón negro "+ Agregar tienda" */
             background: var(--text);
             color: var(--bg);
             border-color: var(--text);
@@ -290,6 +356,7 @@
         .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: var(--text); }
 
         .btn-ghost {
+            /* Botón outline "Limpiar lecturas" */
             background: transparent;
             color: var(--text-muted);
             border-color: var(--border-strong);
@@ -297,8 +364,9 @@
 
         .btn-ghost:hover { border-color: var(--red); color: var(--red); }
 
-        /* ── INFO BOX ── */
+        /* ── CAJA DE INFORMACIÓN ── */
         .info-box {
+            /* El recuadro amarillo con el mensaje explicativo */
             background: #fffbf0;
             border: 1px solid #f0d080;
             border-radius: 10px;
@@ -308,21 +376,25 @@
             margin-bottom: 1.25rem;
         }
 
-        /* ── TABLE ── */
+        /* ── TABLA DE TIENDAS ── */
         .table-wrap {
+            /* Contenedor de la tabla con bordes redondeados */
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 14px;
-            overflow: hidden;
+            overflow: hidden;           /* Oculta los bordes que sobresalen */
             box-shadow: var(--shadow);
             margin-bottom: 1.25rem;
         }
 
         table { width: 100%; border-collapse: collapse; }
+        /* border-collapse: elimina el espacio doble entre celdas */
 
         thead tr { background: var(--bg); border-bottom: 1px solid var(--border); }
+        /* Encabezado de la tabla con fondo gris suave */
 
         th {
+            /* Celdas del encabezado: #, Tienda, Lectura anterior, etc. */
             font-family: 'DM Mono', monospace;
             font-size: 0.65rem;
             text-transform: uppercase;
@@ -334,22 +406,41 @@
         }
 
         td { padding: 0.75rem 1.1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        /* Celdas del cuerpo de la tabla */
 
         tbody tr:last-child td { border-bottom: none; }
-        tbody tr:hover { background: #fafaf8; }
+        /* La última fila no tiene borde inferior */
 
+        tbody tr:hover { background: #fafaf8; }
+        /* Al pasar el mouse por una fila, fondo levemente gris */
+
+        /* Estilos específicos por tipo de columna */
         .td-num { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text-muted); width: 40px; }
+        /* Columna "#": número de tienda */
+
         .td-nombre { font-weight: 500; }
+        /* Columna "Tienda": nombre editable */
+
         .td-lectura-ant { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: var(--text-muted); }
+        /* Columna "Lectura anterior": en gris porque es solo referencia */
+
         .td-kwh { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--text); font-weight: 500; }
+        /* Columna "kWh consumidos" */
+
         .td-total { font-family: 'DM Mono', monospace; font-weight: 500; color: var(--green); }
+        /* Columna "Total en Bs": en verde */
 
         .row-total { background: var(--text) !important; }
+        /* Fila de totales: fondo negro */
+
         .row-total td { color: white; font-weight: 600; border-bottom: none; }
         .row-total .td-total { color: var(--accent); font-size: 1rem; }
+        /* Total general en amarillo dorado */
+
         .row-total .td-kwh { color: white; }
 
         input[type="number"] {
+            /* Los campos donde se ingresa la lectura del medidor */
             width: 120px;
             padding: 0.4rem 0.7rem;
             border: 1.5px solid var(--border-strong);
@@ -362,9 +453,12 @@
         }
 
         input[type="number"]:focus { outline: none; border-color: var(--accent); background: white; }
+
         input[type="number"]::-webkit-inner-spin-button { opacity: 0; }
+        /* Oculta las flechas de incremento/decremento del input numérico */
 
         .btn-guardar {
+            /* Botón verde grande "GUARDAR MES" */
             width: 100%;
             padding: 0.85rem;
             background: var(--green);
@@ -381,16 +475,18 @@
         }
 
         .btn-guardar:hover { background: #145c2c; }
+        /* Al hover: verde más oscuro */
 
-        /* ── RESUMEN ── */
+        /* ── TARJETAS DE RESUMEN ── */
         .resumen {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
             gap: 1rem;
             margin-bottom: 2rem;
         }
 
         .resumen-card {
+            /* Cada tarjeta: "Total a cobrar", "kWh totales", "Promedio" */
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 14px;
@@ -400,11 +496,19 @@
         }
 
         .resumen-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        /* Al hover: sube 2px y sombra más pronunciada */
+
         .resumen-card:first-child { border-left: 3px solid var(--accent); }
+        /* Primera tarjeta: borde izquierdo dorado */
+
         .resumen-card:nth-child(2) { border-left: 3px solid var(--text); }
+        /* Segunda tarjeta: borde izquierdo negro */
+
         .resumen-card:nth-child(3) { border-left: 3px solid var(--green); }
+        /* Tercera tarjeta: borde izquierdo verde */
 
         .resumen-label {
+            /* Etiqueta pequeña "TOTAL A COBRAR" etc. */
             font-family: 'DM Mono', monospace;
             font-size: 0.62rem;
             text-transform: uppercase;
@@ -415,6 +519,7 @@
         }
 
         .resumen-valor {
+            /* Número grande del resumen */
             font-family: 'Syne', sans-serif;
             font-size: 1.8rem;
             font-weight: 700;
@@ -422,10 +527,10 @@
             line-height: 1;
         }
 
-        /* ── REPORTE ── */
+        /* ── SECCIÓN REPORTE ── */
         .reporte-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* Título a la izq, botón imprimir a la der */
             align-items: center;
             margin-bottom: 1rem;
         }
@@ -438,6 +543,7 @@
         }
 
         .btn-imprimir {
+            /* Botón "Imprimir / PDF" */
             font-family: 'DM Mono', monospace;
             font-size: 0.68rem;
             text-transform: uppercase;
@@ -454,6 +560,7 @@
         .btn-imprimir:hover { background: var(--text); color: white; border-color: var(--text); }
 
         .reporte-lista {
+            /* Lista de tiendas ordenadas por consumo */
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 14px;
@@ -462,8 +569,9 @@
         }
 
         .reporte-item {
+            /* Cada fila del reporte: posición, nombre, kWh, monto */
             display: grid;
-            grid-template-columns: 28px 1fr auto auto;
+            grid-template-columns: 28px 1fr auto auto; /* 4 columnas */
             align-items: center;
             gap: 1rem;
             padding: 0.9rem 1.25rem;
@@ -475,26 +583,32 @@
         .reporte-item:hover { background: #fafaf8; }
 
         .reporte-num { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--accent); }
+        /* Número de posición en el ranking (1, 2, 3...) en dorado */
+
         .reporte-nombre { font-weight: 500; font-size: 0.9rem; }
         .reporte-kwh { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text-muted); }
         .reporte-monto { font-family: 'DM Mono', monospace; font-size: 0.9rem; font-weight: 500; color: var(--green); min-width: 80px; text-align: right; }
 
         .section-divider { height: 1px; background: var(--border); margin: 2rem 0; }
+        /* Línea separadora entre secciones */
 
-        /* ── MODAL CAMBIAR PASS ── */
+        /* ── MODAL CAMBIAR CONTRASEÑA ── */
         .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 100;
+            /* El fondo oscuro semitransparente que cubre toda la pantalla */
+            display: none;              /* OCULTO por defecto */
+            position: fixed;            /* Fijo en la pantalla (no se mueve con el scroll) */
+            inset: 0;                   /* Ocupa toda la pantalla (top/right/bottom/left: 0) */
+            background: rgba(0,0,0,0.4); /* Negro con 40% de transparencia */
+            z-index: 100;               /* Encima de todo lo demás */
             align-items: center;
             justify-content: center;
         }
 
         .modal-overlay.active { display: flex; }
+        /* Cuando se le agrega la clase "active", se muestra */
 
         .modal-card {
+            /* La tarjeta blanca del modal */
             background: white;
             border-radius: 16px;
             padding: 2rem;
@@ -513,9 +627,10 @@
         .modal-error { color: var(--red); font-size: 0.82rem; margin-top: 0.5rem; min-height: 1.2em; }
 
         .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
+        /* Botones "Cancelar" y "Guardar" lado a lado */
 
         .btn-cancelar {
-            flex: 1;
+            flex: 1; /* Ocupa la mitad del espacio */
             padding: 0.65rem;
             background: transparent;
             border: 1.5px solid var(--border-strong);
@@ -530,7 +645,7 @@
         .btn-confirmar {
             flex: 1;
             padding: 0.65rem;
-            background: var(--text);
+            background: var(--text);    /* Fondo negro */
             color: white;
             border: none;
             border-radius: 8px;
@@ -541,8 +656,9 @@
         }
 
         .btn-confirmar:hover { background: var(--green); }
+        /* Al hover: fondo verde */
 
-        /* ── RAYO DECORATIVO ── */
+        /* ── ANIMACIÓN DEL RAYO ── */
         .login-bolt {
             display: flex;
             justify-content: center;
@@ -552,19 +668,28 @@
         .bolt-svg {
             width: 52px;
             height: 52px;
-            filter: drop-shadow(0 0 8px rgba(240, 165, 0, 0.5));
-            animation: bolt-pulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(240, 165, 0, 0.5)); /* Brillo dorado */
+            animation: bolt-pulse 2s ease-in-out infinite; /* Animación continua */
         }
 
         @keyframes bolt-pulse {
-            0%, 100% { filter: drop-shadow(0 0 6px rgba(240, 165, 0, 0.4)); transform: scale(1); }
-            50% { filter: drop-shadow(0 0 18px rgba(240, 165, 0, 0.95)); transform: scale(1.1); }
+            /* Define la animación "pulso" del rayo */
+            0%, 100% {
+                filter: drop-shadow(0 0 6px rgba(240, 165, 0, 0.4));
+                transform: scale(1); /* Tamaño normal */
+            }
+            50% {
+                filter: drop-shadow(0 0 18px rgba(240, 165, 0, 0.95)); /* Brillo máximo */
+                transform: scale(1.1); /* 10% más grande */
+            }
+            /* El rayo "respira": se achica, crece, y vuelve a achicarse */
         }
 
         .login-bg-pattern {
+            /* Fondo con gradientes radiales sutiles (manchas doradas difusas) */
             position: fixed;
             inset: 0;
-            pointer-events: none;
+            pointer-events: none;       /* No interfiere con los clics */
             overflow: hidden;
             z-index: 0;
             background-image: 
@@ -574,17 +699,20 @@
 
         #pantalla-login, #pantalla-recuperar { position: relative; }
         .login-card { position: relative; z-index: 1; }
+        /* z-index:1 asegura que la tarjeta esté encima del fondo decorativo */
 
-        /* ── GRÁFICO ── */
+        /* ── LAYOUT TABLA + GRÁFICO ── */
         .tabla-grafico-wrap {
+            /* Contenedor que pone la tabla y el gráfico lado a lado */
             display: grid;
-            grid-template-columns: 1fr 320px;
+            grid-template-columns: 1fr 320px; /* Tabla ocupa el resto, gráfico 320px */
             gap: 1.25rem;
             margin-bottom: 1.25rem;
             align-items: start;
         }
 
         .grafico-card {
+            /* Tarjeta del gráfico de torta */
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 14px;
@@ -593,6 +721,7 @@
         }
 
         .grafico-title {
+            /* Título "⚡ CONSUMO POR TIENDA" */
             font-family: 'DM Mono', monospace;
             font-size: 0.65rem;
             text-transform: uppercase;
@@ -604,10 +733,11 @@
         .grafico-canvas-wrap {
             position: relative;
             width: 100%;
-            aspect-ratio: 1;
+            aspect-ratio: 1; /* Mantiene proporciones cuadradas */
         }
 
         .grafico-legend {
+            /* Leyenda debajo del gráfico: colores y porcentajes */
             margin-top: 1rem;
             display: flex;
             flex-direction: column;
@@ -622,27 +752,30 @@
         }
 
         .legend-dot {
+            /* El circulito de color de cada tienda en la leyenda */
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            flex-shrink: 0;
+            flex-shrink: 0; /* No se encoge */
         }
 
         .legend-nombre {
             flex: 1;
             font-weight: 500;
-            white-space: nowrap;
+            white-space: nowrap;        /* No hace salto de línea */
             overflow: hidden;
-            text-overflow: ellipsis;
+            text-overflow: ellipsis;    /* Si es muy largo, muestra "..." */
         }
 
         .legend-pct {
+            /* Porcentaje de cada tienda en la leyenda */
             font-family: 'DM Mono', monospace;
             font-size: 0.72rem;
             color: var(--text-muted);
         }
 
         .grafico-empty {
+            /* Mensaje "SIN DATOS AÚN" cuando no hay lecturas */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -657,59 +790,97 @@
         @media (max-width: 700px) {
             .tabla-grafico-wrap { grid-template-columns: 1fr; }
         }
+        /* En pantallas menores a 700px, tabla y gráfico se apilan verticalmente */
 
         .header-bolt {
+            /* El rayo pequeño en el título principal de la app */
             display: inline-block;
             vertical-align: middle;
             margin-right: 0.4rem;
             animation: bolt-pulse 2.5s ease-in-out infinite;
             position: relative;
-            top: -2px;
+            top: -2px; /* Ajuste fino de posición vertical */
         }
     </style>
 </head>
 <body>
 
-<!-- ══ PANTALLA LOGIN ══ -->
+<!-- ══════════════════════════════════════════════════════
+     PANTALLA 1: LOGIN
+     Esta pantalla se muestra cuando el usuario NO está logueado.
+     Contiene el formulario de usuario y contraseña.
+     ══════════════════════════════════════════════════════ -->
 <div id="pantalla-login">
+
     <div class="login-bg-pattern"></div>
+    <!-- Fondo decorativo con gradientes dorados difusos -->
+
     <div class="login-card">
+
+        <!-- RAYO ANIMADO -->
         <div class="login-bolt">
             <svg class="bolt-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- SVG: gráfico vectorial del rayo (dibujado con código) -->
                 <polygon points="28,4 12,26 22,26 20,44 36,22 26,22" fill="#f0a500" stroke="#c88500" stroke-width="1.5" stroke-linejoin="round"/>
+                <!-- Polígono principal del rayo en color dorado -->
                 <polygon points="28,4 12,26 22,26 20,44 36,22 26,22" fill="url(#boltGrad)" opacity="0.8"/>
+                <!-- Segunda capa con gradiente para dar profundidad -->
                 <defs>
                     <linearGradient id="boltGrad" x1="12" y1="4" x2="36" y2="44" gradientUnits="userSpaceOnUse">
+                        <!-- Gradiente: de amarillo claro arriba a dorado abajo -->
                         <stop offset="0%" stop-color="#ffe066"/>
                         <stop offset="100%" stop-color="#f0a500"/>
                     </linearGradient>
                 </defs>
             </svg>
         </div>
+
         <div class="login-title">Control de<br>Electricidad</div>
+        <!-- br: salto de línea dentro del título -->
+
         <div class="login-subtitle">Casa de Rojas Halan · Acceso privado</div>
 
+        <!-- CAMPO USUARIO -->
         <div class="login-field">
             <label>Usuario</label>
             <input type="text" id="login-user" placeholder="admin" autocomplete="username">
+            <!-- type="text": campo de texto normal -->
+            <!-- id="login-user": identificador para accederlo desde JavaScript -->
+            <!-- placeholder: texto de guía que desaparece al escribir -->
+            <!-- autocomplete="username": el navegador puede sugerir usuarios guardados -->
         </div>
+
+        <!-- CAMPO CONTRASEÑA -->
         <div class="login-field">
             <label>Contraseña</label>
-            <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') iniciarSesion()">
+            <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"
+                   onkeydown="if(event.key==='Enter') iniciarSesion()">
+            <!-- type="password": oculta los caracteres con puntos -->
+            <!-- onkeydown: al presionar Enter, llama a iniciarSesion() -->
         </div>
 
         <button class="btn-login" onclick="iniciarSesion()">Entrar</button>
+        <!-- onclick: al hacer clic, llama a la función iniciarSesion() de JavaScript -->
+
         <div class="login-error" id="login-error"></div>
+        <!-- Aquí aparece el mensaje de error si el login falla (ej: "Usuario o contraseña incorrectos") -->
 
         <span class="link-recuperar" onclick="mostrarRecuperar()">¿Olvidaste tu contraseña?</span>
+        <!-- Al hacer clic, muestra la pantalla de recuperación de contraseña -->
     </div>
 </div>
 
-<!-- ══ PANTALLA RECUPERAR ══ -->
+<!-- ══════════════════════════════════════════════════════
+     PANTALLA 2: RECUPERAR CONTRASEÑA
+     Esta pantalla se muestra cuando el usuario olvida su contraseña.
+     Tiene 2 pasos:
+       PASO 1: El usuario ingresa su email → se le envía un código
+       PASO 2: El usuario ingresa el código + nueva contraseña
+     ══════════════════════════════════════════════════════ -->
 <div id="pantalla-recuperar">
     <div class="login-card">
 
-        <!-- PASO 1: Pedir correo -->
+        <!-- PASO 1: Pedir el correo electrónico -->
         <div id="rec-paso1">
             <div class="login-bolt">
                 <svg class="bolt-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -721,19 +892,23 @@
             <div class="login-field">
                 <label>Correo electrónico</label>
                 <input type="email" id="rec-email" placeholder="tucorreo@gmail.com">
+                <!-- type="email": valida que tenga formato de email -->
             </div>
             <button class="btn-login" onclick="solicitarCodigo()">Enviar código</button>
+            <!-- Al hacer clic, llama a solicitarCodigo() que hace el fetch al servidor -->
             <div class="login-error" id="rec-error1"></div>
             <span class="link-recuperar" onclick="mostrarLogin()">← Volver al login</span>
         </div>
 
-        <!-- PASO 2: Ingresar código y nueva contraseña -->
+        <!-- PASO 2: Ingresar código + nueva contraseña (oculto inicialmente) -->
         <div id="rec-paso2" style="display:none">
+            <!-- style="display:none": oculto hasta que el código sea enviado exitosamente -->
             <div class="login-title">Nuevo<br>Acceso</div>
             <div class="login-subtitle">Ingresá el código que llegó a tu correo</div>
             <div class="login-field">
                 <label>Código de 6 dígitos</label>
                 <input type="text" id="rec-codigo" placeholder="123456" maxlength="6">
+                <!-- maxlength="6": máximo 6 caracteres (el código tiene 6 dígitos) -->
             </div>
             <div class="login-field">
                 <label>Nueva contraseña</label>
@@ -751,78 +926,106 @@
     </div>
 </div>
 
-<!-- ══ PANTALLA APP ══ -->
+<!-- ══════════════════════════════════════════════════════
+     PANTALLA 3: LA APLICACIÓN PRINCIPAL
+     Esta es la pantalla que se muestra después del login.
+     Contiene toda la funcionalidad del sistema.
+     ══════════════════════════════════════════════════════ -->
 <div id="pantalla-app">
 <div class="page">
 
+    <!-- ENCABEZADO: título + badge tarifa + botones -->
     <div class="header">
         <div class="header-left">
             <h1>
                 <span class="header-bolt">
+                    <!-- Rayo pequeño animado en el título -->
                     <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <polygon points="28,4 12,26 22,26 20,44 36,22 26,22" fill="#f0a500" stroke="#c88500" stroke-width="1" stroke-linejoin="round"/>
                     </svg>
                 </span>Control de<br>Electricidad</h1>
             <div class="subtitle">Sistema de gestión de consumo &nbsp;·&nbsp; Casa de Rojas Halan</div>
+            <!-- &nbsp; es un espacio especial que no se rompe -->
         </div>
         <div class="header-right">
+            <!-- Badge que indica el tipo de tarifa -->
             <div class="precio-badge">
                 <span class="label">Tarifa CRE · Domiciliaria</span>
                 <span class="valor">Escalonada</span>
             </div>
+            <!-- Botón para cerrar sesión -->
             <button class="btn-salir" onclick="cerrarSesion()">🔒 Cerrar sesión</button>
+            <!-- Botón para abrir el modal de cambiar contraseña -->
             <button class="btn-salir" onclick="abrirModalPassword()" style="border-color: var(--border-strong);">🔑 Cambiar contraseña</button>
         </div>
     </div>
 
+    <!-- CONTROLES: selector de mes y botones de acción -->
     <div class="controls">
         <span class="mes-label">Mes de cobro:</span>
         <input type="month" id="mes-input" class="mes-input" onchange="cargarLecturasAnteriores()">
+        <!-- type="month": selector de año y mes (ej: "2026-04") -->
+        <!-- onchange: cada vez que se cambia el mes, carga las lecturas anteriores -->
         <div class="spacer"></div>
         <button class="btn btn-primary" onclick="agregarTienda()">+ Agregar tienda</button>
+        <!-- Agrega una fila nueva a la tabla -->
         <button class="btn btn-ghost" onclick="limpiarLecturas()">Limpiar lecturas</button>
+        <!-- Borra todos los valores ingresados en los campos de lectura -->
     </div>
 
+    <!-- CAJA DE INFORMACIÓN EXPLICATIVA -->
     <div class="info-box">
-        📟 Ingresá la <strong>lectura actual del medidor</strong> de cada tienda. El sistema calcula automáticamente los kWh consumidos y aplica la <strong>tarifa escalonada oficial CRE Santa Cruz</strong>.
+        📟 Ingresá la <strong>lectura actual del medidor</strong> de cada tienda.
+        El sistema calcula automáticamente los kWh consumidos y aplica la
+        <strong>tarifa escalonada oficial CRE Santa Cruz</strong>.
     </div>
 
+    <!-- LAYOUT: TABLA + GRÁFICO LADO A LADO -->
     <div class="tabla-grafico-wrap">
-    <div class="table-wrap">
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Tienda</th>
-                    <th>Lectura anterior</th>
-                    <th>Lectura actual (medidor)</th>
-                    <th>kWh consumidos</th>
-                    <th>Total en Bs</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-body">
-                <!-- filas generadas por JS -->
-            </tbody>
-        </table>
-    </div>
 
-    <!-- GRÁFICO DE TORTA -->
-    <div class="grafico-card">
-        <div class="grafico-title">⚡ Consumo por tienda</div>
-        <div class="grafico-canvas-wrap">
-            <canvas id="graficoPie"></canvas>
+        <!-- TABLA DE LECTURAS -->
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>                          <!-- Número de tienda -->
+                        <th>Tienda</th>                     <!-- Nombre de la tienda -->
+                        <th>Lectura anterior</th>           <!-- Del mes anterior (referencia) -->
+                        <th>Lectura actual (medidor)</th>   <!-- El campo donde se ingresa -->
+                        <th>kWh consumidos</th>             <!-- Calculado automáticamente -->
+                        <th>Total en Bs</th>                <!-- Calculado con tarifa CRE -->
+                    </tr>
+                </thead>
+                <tbody id="tabla-body">
+                    <!-- Las filas de las tiendas se generan dinámicamente con JavaScript -->
+                    <!-- La función inicializarTabla() crea las filas al cargar la app -->
+                </tbody>
+            </table>
         </div>
-        <div class="grafico-legend" id="graficoPieLeyenda"></div>
-    </div>
+
+        <!-- GRÁFICO DE TORTA (dona) -->
+        <div class="grafico-card">
+            <div class="grafico-title">⚡ Consumo por tienda</div>
+            <div class="grafico-canvas-wrap">
+                <canvas id="graficoPie"></canvas>
+                <!-- canvas: elemento HTML donde Chart.js dibuja el gráfico -->
+            </div>
+            <div class="grafico-legend" id="graficoPieLeyenda"></div>
+            <!-- Aquí se genera la leyenda de colores con JavaScript -->
+        </div>
 
     </div><!-- fin tabla-grafico-wrap -->
 
+    <!-- BOTÓN GUARDAR MES -->
     <button class="btn-guardar" onclick="guardarMes()">💾 Guardar mes</button>
+    <!-- Guarda todas las lecturas del mes en la base de datos -->
 
+    <!-- TARJETAS DE RESUMEN -->
     <div class="resumen">
         <div class="resumen-card">
             <span class="resumen-label">Total a cobrar</span>
             <div class="resumen-valor" id="res-total">0 Bs</div>
+            <!-- Se actualiza en tiempo real con calcular() -->
         </div>
         <div class="resumen-card">
             <span class="resumen-label">kWh totales</span>
@@ -835,17 +1038,24 @@
     </div>
 
     <div class="section-divider"></div>
+    <!-- Línea divisora decorativa -->
 
+    <!-- SECCIÓN REPORTE DE COBROS -->
     <div class="reporte-header">
         <h2>Resumen de cobros</h2>
         <button class="btn-imprimir" onclick="window.print()">🖨 Imprimir / PDF</button>
+        <!-- window.print(): abre el diálogo de impresión del navegador -->
     </div>
     <div class="reporte-lista" id="reporte"></div>
+    <!-- Lista de tiendas ordenadas de mayor a menor consumo, generada con JavaScript -->
 
 </div>
 </div>
 
-<!-- ══ MODAL CAMBIAR PASSWORD ══ -->
+<!-- ══════════════════════════════════════════════════════
+     MODAL: CAMBIAR CONTRASEÑA
+     Aparece encima de la app cuando se hace clic en "Cambiar contraseña"
+     ══════════════════════════════════════════════════════ -->
 <div class="modal-overlay" id="modal-password">
     <div class="modal-card">
         <div class="modal-title">Cambiar contraseña</div>
@@ -862,6 +1072,7 @@
             <input type="password" id="cp-confirmar" placeholder="••••••••">
         </div>
         <div class="modal-error" id="cp-error"></div>
+        <!-- Mensaje de error del modal (ej: "Las contraseñas no coinciden") -->
         <div class="modal-actions">
             <button class="btn-cancelar" onclick="cerrarModalPassword()">Cancelar</button>
             <button class="btn-confirmar" onclick="cambiarPassword()">Guardar</button>
@@ -869,12 +1080,23 @@
     </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════
+     JAVASCRIPT — LA LÓGICA DE LA PÁGINA
+     Todo lo que hace que la página sea interactiva y dinámica
+     ══════════════════════════════════════════════════════ -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<!-- Carga la librería Chart.js desde internet para dibujar el gráfico de torta -->
+
 <script>
-    // Tarifa escalonada CRE Santa Cruz - Categoría Domiciliaria
+    // ============================================================
+    // FUNCIÓN: calcularTarifaCRE (duplicada del servidor)
+    // Se calcula también aquí para mostrar los totales EN TIEMPO REAL
+    // mientras el usuario escribe, sin necesidad de llamar al servidor.
+    // ============================================================
     function calcularTarifaCRE(kwh) {
         if (kwh <= 0) return 0;
-        if (kwh <= 15) return 13.73;   // cargo mínimo fijo
+        if (kwh <= 15) return 13.73;
         if (kwh <= 120) return kwh * 0.758;
         if (kwh <= 300) return kwh * 0.969;
         if (kwh <= 500) return kwh * 1.020;
@@ -882,41 +1104,77 @@
         return kwh * 1.479;
     }
 
-    let cantidadTiendas = 6;
-    let lecturasAnteriores = {};
-    let TOKEN = localStorage.getItem('token_electricidad') || '';
+    // --- VARIABLES GLOBALES ---
 
-    // ── AUTH ──
+    let cantidadTiendas = 6;
+    // Empieza con 6 tiendas. Se incrementa cuando se hace clic en "+ Agregar tienda"
+
+    let lecturasAnteriores = {};
+    // Objeto que almacena las lecturas del mes anterior.
+    // Ejemplo: { "Tienda 1": 97, "Tienda 2": 2593, ... }
+
+    let TOKEN = localStorage.getItem('token_electricidad') || '';
+    // Intenta recuperar el token guardado en el navegador (localStorage).
+    // Si existe, el usuario ya estaba logueado y no necesita volver a ingresar.
+    // localStorage: almacenamiento permanente en el navegador (no se borra al cerrar)
+
+    // ============================================================
+    // SECCIÓN: AUTENTICACIÓN
+    // Funciones relacionadas con login, logout y contraseñas
+    // ============================================================
 
     async function iniciarSesion() {
+        // async: función asíncrona (puede esperar respuestas del servidor)
         const username = document.getElementById('login-user').value.trim();
+        // .getElementById(): busca el elemento HTML por su id
+        // .value: obtiene el texto escrito en el campo
+        // .trim(): elimina espacios al inicio y final
+
         const password = document.getElementById('login-pass').value;
         document.getElementById('login-error').textContent = '';
+        // Limpia cualquier mensaje de error previo
 
         try {
             const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                // fetch: hace una petición HTTP al servidor
+                // await: espera la respuesta antes de continuar
+                method: 'POST',                             // Tipo de petición
+                headers: { 'Content-Type': 'application/json' }, // Formato JSON
+                body: JSON.stringify({ username, password }) // Datos enviados al servidor
             });
             const data = await res.json();
+            // Convierte la respuesta del servidor de JSON a objeto JavaScript
+
             if (!res.ok) {
+                // res.ok: true si el servidor respondió con éxito (código 200-299)
                 document.getElementById('login-error').textContent = data.error || 'Error al iniciar sesión';
-                return;
+                return; // Sale de la función sin continuar
             }
+
             TOKEN = data.token;
+            // Guarda el token recibido del servidor
+
             localStorage.setItem('token_electricidad', TOKEN);
+            // Guarda el token en el navegador para no pedir login la próxima vez
+
             mostrarApp();
+            // Muestra la pantalla principal de la aplicación
+
         } catch {
             document.getElementById('login-error').textContent = 'Error de conexión';
+            // Si hay un error de red (servidor caído, sin internet), muestra este mensaje
         }
     }
 
     async function solicitarCodigo() {
+        // Envía el email al servidor para recibir el código de recuperación
         const email = document.getElementById('rec-email').value.trim();
         const errEl = document.getElementById('rec-error1');
-        errEl.textContent = '';
+        errEl.textContent = ''; // Limpia errores previos
+
         if (!email) { errEl.textContent = 'Ingresá tu correo'; return; }
+        // Validación: si el campo está vacío, muestra error y no continúa
+
         try {
             const res = await fetch('/api/solicitar-recuperacion', {
                 method: 'POST',
@@ -925,20 +1183,24 @@
             });
             const data = await res.json();
             if (!res.ok) { errEl.textContent = data.error; return; }
-            document.getElementById('rec-paso1').style.display = 'none';
-            document.getElementById('rec-paso2').style.display = 'block';
+
+            // Si el servidor respondió bien, avanza al paso 2
+            document.getElementById('rec-paso1').style.display = 'none';  // Oculta paso 1
+            document.getElementById('rec-paso2').style.display = 'block'; // Muestra paso 2
         } catch {
             errEl.textContent = 'Error de conexión';
         }
     }
 
     function volverPaso1() {
+        // Vuelve al paso 1 del formulario de recuperación
         document.getElementById('rec-paso1').style.display = 'block';
         document.getElementById('rec-paso2').style.display = 'none';
         document.getElementById('rec-error2').textContent = '';
     }
 
     async function recuperarPassword() {
+        // Verifica el código e ingresa la nueva contraseña
         const email = document.getElementById('rec-email').value.trim();
         const codigo = document.getElementById('rec-codigo').value.trim();
         const nueva = document.getElementById('rec-nueva').value;
@@ -947,7 +1209,10 @@
         errEl.textContent = '';
 
         if (nueva !== confirmar) { errEl.textContent = 'Las contraseñas no coinciden'; return; }
+        // Validación: las dos contraseñas deben ser iguales
+
         if (nueva.length < 6) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres'; return; }
+        // Validación: mínimo 6 caracteres de seguridad
 
         try {
             const res = await fetch('/api/recuperar', {
@@ -957,14 +1222,18 @@
             });
             const data = await res.json();
             if (!res.ok) { errEl.textContent = data.error; return; }
+
             alert('✅ Contraseña actualizada. Iniciá sesión con tu nueva contraseña.');
-            mostrarLogin();
+            // alert: muestra un popup en el navegador
+
+            mostrarLogin(); // Vuelve a la pantalla de login
         } catch {
             errEl.textContent = 'Error de conexión';
         }
     }
 
     async function cambiarPassword() {
+        // Cambia la contraseña estando logueado (desde el modal)
         const actual = document.getElementById('cp-actual').value;
         const nueva = document.getElementById('cp-nueva').value;
         const confirmar = document.getElementById('cp-confirmar').value;
@@ -977,11 +1246,16 @@
         try {
             const res = await fetch('/api/cambiar-password', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + TOKEN
+                    // Authorization: envía el token para demostrar que está logueado
+                },
                 body: JSON.stringify({ password_actual: actual, nueva_password: nueva })
             });
             const data = await res.json();
             if (!res.ok) { errEl.textContent = data.error; return; }
+
             alert('✅ Contraseña cambiada correctamente');
             cerrarModalPassword();
         } catch {
@@ -991,73 +1265,116 @@
 
     function cerrarSesion() {
         if (!confirm('¿Cerrar sesión?')) return;
-        TOKEN = '';
-        localStorage.removeItem('token_electricidad');
-        mostrarLogin();
+        // confirm: muestra un popup con "Aceptar" y "Cancelar"
+        // Si el usuario cancela, la función termina sin hacer nada
+
+        TOKEN = ''; // Borra el token de la memoria
+        localStorage.removeItem('token_electricidad'); // Borra el token del navegador
+        mostrarLogin(); // Vuelve a la pantalla de login
     }
 
-    // ── NAVEGACIÓN ──
+    // ============================================================
+    // SECCIÓN: NAVEGACIÓN
+    // Funciones para mostrar/ocultar las diferentes pantallas
+    // ============================================================
 
     function mostrarLogin() {
         document.getElementById('pantalla-login').style.display = 'flex';
         document.getElementById('pantalla-recuperar').style.display = 'none';
         document.getElementById('pantalla-app').style.display = 'none';
+        // Muestra login, oculta las otras dos pantallas
     }
 
     function mostrarRecuperar() {
         document.getElementById('pantalla-login').style.display = 'none';
         document.getElementById('pantalla-recuperar').style.display = 'flex';
         document.getElementById('pantalla-app').style.display = 'none';
+        // Muestra recuperar, oculta las otras dos pantallas
     }
 
     function mostrarApp() {
         document.getElementById('pantalla-login').style.display = 'none';
         document.getElementById('pantalla-recuperar').style.display = 'none';
         document.getElementById('pantalla-app').style.display = 'block';
-        inicializarTabla();
-        cargarLecturasAnteriores();
+        // Muestra la app, oculta login y recuperar
+        inicializarTabla();          // Crea las filas de la tabla
+        cargarLecturasAnteriores();  // Carga las lecturas del mes anterior
     }
 
-    function abrirModalPassword() { document.getElementById('modal-password').classList.add('active'); }
+    function abrirModalPassword() {
+        document.getElementById('modal-password').classList.add('active');
+        // classList.add: agrega la clase CSS 'active' que hace visible el modal
+    }
+
     function cerrarModalPassword() {
         document.getElementById('modal-password').classList.remove('active');
+        // classList.remove: quita la clase 'active', ocultando el modal
+        // Limpia los campos del modal
         document.getElementById('cp-actual').value = '';
         document.getElementById('cp-nueva').value = '';
         document.getElementById('cp-confirmar').value = '';
         document.getElementById('cp-error').textContent = '';
     }
 
-    // ── TABLA ──
+    // ============================================================
+    // SECCIÓN: TABLA DE TIENDAS
+    // Funciones para crear y manejar la tabla de lecturas
+    // ============================================================
 
     function inicializarTabla() {
+        // Crea todas las filas de la tabla al cargar la app
         const tbody = document.getElementById('tabla-body');
         tbody.innerHTML = '';
+        // Limpia el contenido previo de la tabla
+
         for (let i = 1; i <= cantidadTiendas; i++) {
             tbody.appendChild(crearFila(i));
+            // Agrega una fila por cada tienda
         }
         tbody.appendChild(crearFilaTotal());
-        calcular();
+        // Agrega la fila de totales al final
+
+        calcular(); // Calcula los totales iniciales (todos en 0)
     }
 
     function crearFila(num) {
+        // Crea y devuelve una fila HTML para una tienda
         const tr = document.createElement('tr');
+        // createElement: crea un nuevo elemento HTML
         tr.id = `fila-${num}`;
+        // Asigna un id único: "fila-1", "fila-2", etc.
+
         tr.innerHTML = `
             <td class="td-num">${num}</td>
+            <!-- Número de tienda -->
+
             <td class="td-nombre" contenteditable="true" spellcheck="false">Tienda ${num}</td>
+            <!-- contenteditable="true": el usuario puede hacer clic y editar el nombre -->
+            <!-- spellcheck="false": no marca errores de ortografía -->
+
             <td class="td-lectura-ant" id="ant-${num}">—</td>
+            <!-- Lectura anterior (se carga desde la base de datos) -->
+
             <td><input type="number" id="lectura-${num}" oninput="calcular()" placeholder="0" min="0"></td>
+            <!-- Campo donde el usuario ingresa la lectura actual -->
+            <!-- oninput="calcular()": recalcula los totales cada vez que se escribe -->
+
             <td class="td-kwh" id="kwh-${num}">0 kWh</td>
+            <!-- kWh consumidos (calculado automáticamente) -->
+
             <td class="td-total" id="total-${num}">0 Bs</td>
+            <!-- Total en Bs (calculado con la tarifa CRE) -->
         `;
         return tr;
     }
 
     function crearFilaTotal() {
+        // Crea la fila negra de "Total general" al final de la tabla
         const tr = document.createElement('tr');
         tr.className = 'row-total';
         tr.innerHTML = `
             <td colspan="4"><strong>Total general</strong></td>
+            <!-- colspan="4": esta celda ocupa 4 columnas -->
             <td class="td-kwh" id="totalKwh"><strong>0 kWh</strong></td>
             <td class="td-total" id="totalGeneral"><strong>0 Bs</strong></td>
         `;
@@ -1065,39 +1382,68 @@
     }
 
     function calcular() {
+        // Recalcula todos los kWh y totales en tiempo real
+        // Se ejecuta cada vez que el usuario escribe en algún campo
         let totalGeneral = 0;
         let totalKwh = 0;
-        let tiendas = 0;
-        let filas = [];
+        let tiendas = 0;   // Contador de tiendas con datos
+        let filas = [];    // Array para guardar datos de cada tienda (para el gráfico y reporte)
 
         for (let i = 1; i <= cantidadTiendas; i++) {
             const input = document.getElementById(`lectura-${i}`);
-            if (!input) continue;
+            if (!input) continue; // Si no existe la fila, saltear
+
             const lecturaActual = parseFloat(input.value) || 0;
+            // parseFloat: convierte texto a número decimal
+            // || 0: si está vacío o no es número, usa 0
+
             const nombreEl = document.querySelector(`#fila-${i} .td-nombre`);
+            // querySelector: busca un elemento usando selectores CSS
+            // Busca el elemento con clase "td-nombre" dentro de "fila-i"
+
             const nombre = nombreEl ? nombreEl.textContent.trim() : `Tienda ${i}`;
+            // textContent: obtiene el texto visible del elemento
+            // Si no encuentra el elemento, usa "Tienda i" por defecto
+
             const lecturaAnterior = lecturasAnteriores[nombre] || 0;
+            // Busca la lectura anterior de esta tienda en el objeto lecturasAnteriores
+
             const kwh = Math.max(0, lecturaActual - lecturaAnterior);
+            // Calcula kWh: lectura actual - lectura anterior
+            // Math.max(0, ...): garantiza que nunca sea negativo
+
             const total = calcularTarifaCRE(kwh);
+            // Calcula el costo con la tarifa oficial
 
+            // Actualiza los textos en la tabla
             document.getElementById(`kwh-${i}`).textContent = kwh.toFixed(1) + ' kWh';
+            // .toFixed(1): redondea a 1 decimal (ej: 97.0)
             document.getElementById(`total-${i}`).textContent = total.toFixed(2) + ' Bs';
+            // .toFixed(2): redondea a 2 decimales (ej: 73.53)
 
-            totalGeneral += total;
-            totalKwh += kwh;
+            totalGeneral += total;  // Suma al total general
+            totalKwh += kwh;        // Suma a los kWh totales
             if (lecturaActual > 0) tiendas++;
             filas.push({ num: i, nombre, kwh, monto: total });
+            // Agrega los datos de esta tienda al array para el gráfico
         }
 
+        // Actualiza la fila de totales
         document.getElementById('totalGeneral').innerHTML = '<strong>' + totalGeneral.toFixed(2) + ' Bs</strong>';
         document.getElementById('totalKwh').innerHTML = '<strong>' + totalKwh.toFixed(1) + ' kWh</strong>';
+
+        // Actualiza las tarjetas de resumen
         document.getElementById('res-total').textContent = totalGeneral.toFixed(2) + ' Bs';
         document.getElementById('res-kwh').textContent = totalKwh.toFixed(1);
         document.getElementById('res-prom').textContent = tiendas > 0 ? (totalGeneral / tiendas).toFixed(2) + ' Bs' : '0 Bs';
+        // Promedio = total / cantidad de tiendas con datos
 
-        actualizarGrafico(filas);
+        actualizarGrafico(filas); // Actualiza el gráfico de torta
 
+        // Genera el reporte ordenado de mayor a menor consumo
         filas.sort((a, b) => b.kwh - a.kwh);
+        // .sort(): ordena el array. (a,b) => b.kwh - a.kwh ordena de mayor a menor
+
         document.getElementById('reporte').innerHTML = filas.map((f, rank) => `
             <div class="reporte-item">
                 <span class="reporte-num">${rank + 1}</span>
@@ -1106,22 +1452,36 @@
                 <span class="reporte-monto">${f.monto === 0 ? '— Bs' : f.monto.toFixed(2) + ' Bs'}</span>
             </div>
         `).join('');
+        // .map(): transforma cada elemento del array en HTML
+        // .join(''): une todos los HTMLs en un solo string
     }
 
-    // ── GRÁFICO ──
+    // ============================================================
+    // SECCIÓN: GRÁFICO DE TORTA (dona)
+    // Usa la librería Chart.js para dibujar el gráfico
+    // ============================================================
+
     let pieChart = null;
+    // Variable global que guarda el gráfico (para poder destruirlo y recrearlo)
+
     const COLORES = [
         '#f0a500','#1a7a3a','#2563eb','#d63b2f','#7c3aed',
         '#0891b2','#ea580c','#65a30d','#db2777','#854d0e',
         '#0f766e','#4338ca'
     ];
+    // Paleta de 12 colores distintos para las tiendas en el gráfico
 
     function actualizarGrafico(filas) {
+        // Actualiza o crea el gráfico de torta con los datos actuales
         const conDatos = filas.filter(f => f.kwh > 0);
+        // .filter(): devuelve solo los elementos que cumplen la condición
+        // Solo incluye tiendas que tienen consumo > 0
+
         const canvas = document.getElementById('graficoPie');
         const leyenda = document.getElementById('graficoPieLeyenda');
 
         if (conDatos.length === 0) {
+            // Si no hay datos, destruye el gráfico y muestra mensaje
             if (pieChart) { pieChart.destroy(); pieChart = null; }
             canvas.style.display = 'none';
             leyenda.innerHTML = '<div class="grafico-empty">Sin datos aún</div>';
@@ -1130,39 +1490,46 @@
 
         canvas.style.display = 'block';
         const totalKwh = conDatos.reduce((s, f) => s + f.kwh, 0);
-        const labels = conDatos.map(f => f.nombre);
-        const data = conDatos.map(f => parseFloat(f.kwh.toFixed(1)));
+        // .reduce(): suma todos los kWh. s = acumulador, f = elemento actual
+
+        const labels = conDatos.map(f => f.nombre);   // Nombres para el tooltip
+        const data = conDatos.map(f => parseFloat(f.kwh.toFixed(1))); // Valores
         const colors = conDatos.map((_, i) => COLORES[i % COLORES.length]);
+        // i % COLORES.length: cicla los colores si hay más tiendas que colores
 
         if (pieChart) pieChart.destroy();
+        // Destruye el gráfico anterior para crear uno nuevo actualizado
+
         pieChart = new Chart(canvas, {
-            type: 'doughnut',
+            type: 'doughnut',       // Tipo "dona" (torta con hueco en el centro)
             data: {
                 labels,
                 datasets: [{
                     data,
                     backgroundColor: colors,
                     borderWidth: 2,
-                    borderColor: '#ffffff'
+                    borderColor: '#ffffff' // Borde blanco entre sectores
                 }]
             },
             options: {
-                responsive: true,
+                responsive: true,   // Se adapta al tamaño del contenedor
                 plugins: {
-                    legend: { display: false },
+                    legend: { display: false }, // Oculta la leyenda de Chart.js (usamos la nuestra)
                     tooltip: {
                         callbacks: {
                             label: ctx => {
                                 const pct = ((ctx.parsed / totalKwh) * 100).toFixed(1);
                                 return ` ${ctx.parsed} kWh (${pct}%)`;
+                                // Formato del tooltip al pasar el mouse sobre el gráfico
                             }
                         }
                     }
                 },
-                cutout: '60%'
+                cutout: '60%' // El tamaño del hueco central (60% = dona)
             }
         });
 
+        // Genera la leyenda personalizada debajo del gráfico
         leyenda.innerHTML = conDatos.map((f, i) => {
             const pct = ((f.kwh / totalKwh) * 100).toFixed(1);
             return `
@@ -1175,74 +1542,129 @@
         }).join('');
     }
 
+    // ============================================================
+    // SECCIÓN: COMUNICACIÓN CON EL SERVIDOR
+    // Funciones que hacen peticiones HTTP a la API del servidor
+    // ============================================================
+
     async function cargarLecturasAnteriores() {
+        // Carga las lecturas del mes anterior desde la base de datos
         const mes = document.getElementById('mes-input').value;
-        if (!mes) return;
+        if (!mes) return; // Si no hay mes seleccionado, no hace nada
+
         try {
             const res = await fetch(`/api/lecturas-anteriores/${mes}`, {
                 headers: { 'Authorization': 'Bearer ' + TOKEN }
+                // Manda el token para que el servidor sepa que está logueado
             });
+
             if (res.status === 401) { cerrarSesion(); return; }
+            // 401: token expirado → cierra sesión automáticamente
+
             const data = await res.json();
+
             lecturasAnteriores = {};
+            // Resetea el objeto antes de llenarlo con nuevos datos
+
             data.forEach(r => { lecturasAnteriores[r.tienda] = parseFloat(r.lectura); });
+            // .forEach(): recorre cada elemento del array
+            // Llena el objeto: { "Tienda 1": 97, "Tienda 2": 2593, ... }
+
+            // Actualiza la columna "Lectura anterior" en la tabla
             for (let i = 1; i <= cantidadTiendas; i++) {
                 const nombreEl = document.querySelector(`#fila-${i} .td-nombre`);
                 const nombre = nombreEl ? nombreEl.textContent.trim() : `Tienda ${i}`;
                 const antEl = document.getElementById(`ant-${i}`);
-                if (antEl) antEl.textContent = lecturasAnteriores[nombre] !== undefined ? lecturasAnteriores[nombre] + ' kWh' : '—';
+                if (antEl) antEl.textContent = lecturasAnteriores[nombre] !== undefined
+                    ? lecturasAnteriores[nombre] + ' kWh'
+                    : '—';
+                // Si tiene lectura anterior, muestra el número. Si no, muestra "—"
             }
-            calcular();
+
+            calcular(); // Recalcula con las nuevas lecturas anteriores
         } catch {}
+        // El catch vacío ignora errores de red silenciosamente
     }
 
     async function guardarMes() {
+        // Guarda todas las lecturas del mes actual en la base de datos
         const mes = document.getElementById('mes-input').value;
         if (!mes) { alert('Seleccioná un mes primero'); return; }
 
         for (let i = 1; i <= cantidadTiendas; i++) {
             const input = document.getElementById(`lectura-${i}`);
             if (!input || !input.value) continue;
+            // Si el campo está vacío, no guarda esa tienda
+
             const nombreEl = document.querySelector(`#fila-${i} .td-nombre`);
             const nombre = nombreEl ? nombreEl.textContent.trim() : `Tienda ${i}`;
             const lectura = parseFloat(input.value) || 0;
 
             await fetch('/api/guardar', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + TOKEN
+                },
                 body: JSON.stringify({ tienda: nombre, lectura, mes })
+                // Envía: nombre de tienda, lectura actual y mes al servidor
             });
+            // El servidor calcula los kWh y el total, y guarda todo en la BD
         }
+
         alert('✅ Datos guardados correctamente');
         cargarLecturasAnteriores();
+        // Recarga las lecturas anteriores (ahora el mes guardado será el "anterior" del próximo)
     }
 
     function agregarTienda() {
+        // Agrega una nueva fila a la tabla
         cantidadTiendas++;
+        // Incrementa el contador de tiendas
+
         const tbody = document.getElementById('tabla-body');
         const rowTotal = tbody.querySelector('.row-total');
+        // Busca la fila de totales para insertar ANTES de ella
+
         tbody.insertBefore(crearFila(cantidadTiendas), rowTotal);
-        calcular();
+        // insertBefore: inserta la nueva fila antes de la fila de totales
+
+        calcular(); // Recalcula con la nueva fila (en 0)
     }
 
     function limpiarLecturas() {
+        // Borra todos los valores ingresados en los campos de lectura
         if (!confirm('¿Limpiar todas las lecturas?')) return;
+
         for (let i = 1; i <= cantidadTiendas; i++) {
             const input = document.getElementById(`lectura-${i}`);
             if (input) input.value = '';
+            // Borra el valor de cada campo numérico
         }
-        calcular();
+        calcular(); // Recalcula (todos quedan en 0)
     }
 
-    // ── INIT ──
+    // ============================================================
+    // INICIALIZACIÓN — Se ejecuta cuando carga la página
+    // ============================================================
+
     const hoy = new Date();
+    // new Date(): crea un objeto con la fecha y hora actual
+
     document.getElementById('mes-input').value =
         hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0');
+    // Setea el selector de mes al mes actual automáticamente
+    // getFullYear(): año (ej: 2026)
+    // getMonth() + 1: mes (0-11, por eso +1)
+    // padStart(2, '0'): agrega un 0 adelante si es necesario (ej: "4" → "04")
+    // Resultado: "2026-04"
 
     if (TOKEN && TOKEN.length > 10) {
         mostrarApp();
+        // Si hay un token guardado y es válido (más de 10 caracteres), muestra la app directamente
     } else {
         mostrarLogin();
+        // Si no hay token, muestra el login
     }
 </script>
 </body>

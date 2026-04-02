@@ -8,6 +8,49 @@ const PORT = process.env.PORT || 8080;
 const JWT_SECRET = process.env.JWT_SECRET || 'clave_secreta_electricidad_2024';
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
+// Función para calcular tarifa CRE acumulativa (Santa Cruz)
+function calcularTarifaCRE(kwh) {
+    if (kwh <= 0) return 0;
+    if (kwh <= 15) return 13.73; // cargo mínimo fijo
+
+    let total = 0;
+
+    // Tramo 1: primeros 15 kWh → mínimo fijo
+    total += 13.73;
+
+    // Tramo 2: kWh 16 a 120 → Bs 0.758 por kWh
+    if (kwh > 15) {
+        const tramo = Math.min(kwh, 120) - 15;
+        total += tramo * 0.758;
+    }
+
+    // Tramo 3: kWh 121 a 300 → Bs 0.969 por kWh
+    if (kwh > 120) {
+        const tramo = Math.min(kwh, 300) - 120;
+        total += tramo * 0.969;
+    }
+
+    // Tramo 4: kWh 301 a 500 → Bs 1.020 por kWh
+    if (kwh > 300) {
+        const tramo = Math.min(kwh, 500) - 300;
+        total += tramo * 1.020;
+    }
+
+    // Tramo 5: kWh 501 a 1000 → Bs 1.068 por kWh
+    if (kwh > 500) {
+        const tramo = Math.min(kwh, 1000) - 500;
+        total += tramo * 1.068;
+    }
+
+    // Tramo 6: más de 1000 kWh → Bs 1.479 por kWh
+    if (kwh > 1000) {
+        const tramo = kwh - 1000;
+        total += tramo * 1.479;
+    }
+
+    return parseFloat(total.toFixed(2));
+}
+
 // Función para enviar email con Resend
 async function enviarEmail(to, subject, html) {
     const res = await fetch('https://api.resend.com/emails', {
@@ -28,17 +71,6 @@ async function enviarEmail(to, subject, html) {
         throw new Error(JSON.stringify(err));
     }
     return res.json();
-}
-
-// Tarifa escalonada CRE Santa Cruz - Categoría Domiciliaria (D-PD-BT)
-function calcularTarifaCRE(kwh) {
-    if (kwh <= 0) return 0;
-    if (kwh <= 15) return 13.73; // cargo mínimo fijo
-    if (kwh <= 120) return kwh * 0.758;
-    if (kwh <= 300) return kwh * 0.969;
-    if (kwh <= 500) return kwh * 1.020;
-    if (kwh <= 1000) return kwh * 1.068;
-    return kwh * 1.479;
 }
 
 app.use(express.json());
@@ -86,19 +118,11 @@ function crearTablas() {
             if (err) { console.log('Error creando tabla registros:', err); return; }
             console.log('Tablas listas ✅');
             db.query('SELECT COUNT(*) as total FROM usuario', (err, res) => {
-                if (err) return;
+                if (err || res[0].total > 0) return;
                 const passwordHash = bcrypt.hashSync('admin1234', 10);
-                if (res[0].total === 0) {
-                    // Crear usuario admin por primera vez
-                    db.query('INSERT INTO usuario (username, password_hash, email) VALUES (?, ?, ?)',
-                        ['admin', passwordHash, 'gabriel19soto00@gmail.com'],
-                        () => console.log('Usuario admin creado ✅'));
-                } else {
-                    // Siempre resetear la contraseña a admin1234 al arrancar
-                    db.query('UPDATE usuario SET password_hash = ? WHERE username = ?',
-                        [passwordHash, 'admin'],
-                        () => console.log('Contraseña admin reseteada a admin1234 ✅'));
-                }
+                db.query('INSERT INTO usuario (username, password_hash, email) VALUES (?, ?, ?)',
+                    ['admin', passwordHash, 'gabriel19soto00@gmail.com'],
+                    () => console.log('Usuario admin creado ✅'));
             });
         });
     });
@@ -193,7 +217,8 @@ app.post('/api/guardar', verificarToken, (req, res) => {
         if (err) return res.json({ error: err });
         let lecturaAnterior = resultados.length > 0 ? parseFloat(resultados[0].lectura) : 0;
         let kwh = Math.max(0, lectura - lecturaAnterior);
-        const total = calcularTarifaCRE(kwh);
+        const PRECIO_KWH = 2;
+        const total = kwh * PRECIO_KWH;
         db.query('SELECT id FROM registros WHERE tienda = ? AND mes = ?', [tienda, mes], (err, existe) => {
             if (err) return res.json({ error: err });
             if (existe.length > 0) {
