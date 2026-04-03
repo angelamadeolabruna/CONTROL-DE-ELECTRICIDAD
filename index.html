@@ -964,8 +964,8 @@
     <div class="controls">
         <span class="mes-label">Mes de cobro:</span>
         <input type="month" id="mes-input" class="mes-input" onchange="cargarLecturasAnteriores()">
-        <!-- type="month": selector de año y mes (ej: "2026-04") -->
-        <!-- onchange: cada vez que se cambia el mes, carga las lecturas anteriores -->
+        <span class="mes-label" style="margin-left: 1rem;">Total Factura (Bs):</span>
+        <input type="number" id="monto-factura" class="mes-input" placeholder="Ej: 768.20" oninput="calcular()" min="0" step="0.01" style="width: 120px;">
         <div class="spacer"></div>
         <button class="btn btn-primary" onclick="agregarTienda()">+ Agregar tienda</button>
         <!-- Agrega una fila nueva a la tabla -->
@@ -1089,20 +1089,7 @@
 <!-- Carga la librería Chart.js desde internet para dibujar el gráfico de torta -->
 
 <script>
-    // ============================================================
-    // FUNCIÓN: calcularTarifaCRE (duplicada del servidor)
-    // Se calcula también aquí para mostrar los totales EN TIEMPO REAL
-    // mientras el usuario escribe, sin necesidad de llamar al servidor.
-    // ============================================================
-    function calcularTarifaCRE(kwh) {
-        if (kwh <= 0) return 0;
-        if (kwh <= 15) return 13.73;
-        if (kwh <= 120) return kwh * 0.758;
-        if (kwh <= 300) return kwh * 0.969;
-        if (kwh <= 500) return kwh * 1.020;
-        if (kwh <= 1000) return kwh * 1.068;
-        return kwh * 1.479;
-    }
+    // Función calcularTarifaCRE eliminada por cálculo proporcional
 
     // --- VARIABLES GLOBALES ---
 
@@ -1382,68 +1369,59 @@
     }
 
     function calcular() {
-        // Recalcula todos los kWh y totales en tiempo real
-        // Se ejecuta cada vez que el usuario escribe en algún campo
-        let totalGeneral = 0;
         let totalKwh = 0;
-        let tiendas = 0;   // Contador de tiendas con datos
-        let filas = [];    // Array para guardar datos de cada tienda (para el gráfico y reporte)
+        let tiendas = 0;
+        let datosTiendas = [];
 
         for (let i = 1; i <= cantidadTiendas; i++) {
             const input = document.getElementById(`lectura-${i}`);
-            if (!input) continue; // Si no existe la fila, saltear
+            if (!input) continue;
 
             const lecturaActual = parseFloat(input.value) || 0;
-            // parseFloat: convierte texto a número decimal
-            // || 0: si está vacío o no es número, usa 0
-
             const nombreEl = document.querySelector(`#fila-${i} .td-nombre`);
-            // querySelector: busca un elemento usando selectores CSS
-            // Busca el elemento con clase "td-nombre" dentro de "fila-i"
-
             const nombre = nombreEl ? nombreEl.textContent.trim() : `Tienda ${i}`;
-            // textContent: obtiene el texto visible del elemento
-            // Si no encuentra el elemento, usa "Tienda i" por defecto
-
             const lecturaAnterior = lecturasAnteriores[nombre] || 0;
-            // Busca la lectura anterior de esta tienda en el objeto lecturasAnteriores
 
             const kwh = Math.max(0, lecturaActual - lecturaAnterior);
-            // Calcula kWh: lectura actual - lectura anterior
-            // Math.max(0, ...): garantiza que nunca sea negativo
-
-            const total = calcularTarifaCRE(kwh);
-            // Calcula el costo con la tarifa oficial
-
-            // Actualiza los textos en la tabla
-            document.getElementById(`kwh-${i}`).textContent = kwh.toFixed(1) + ' kWh';
-            // .toFixed(1): redondea a 1 decimal (ej: 97.0)
-            document.getElementById(`total-${i}`).textContent = total.toFixed(2) + ' Bs';
-            // .toFixed(2): redondea a 2 decimales (ej: 73.53)
-
-            totalGeneral += total;  // Suma al total general
-            totalKwh += kwh;        // Suma a los kWh totales
+            totalKwh += kwh;
             if (lecturaActual > 0) tiendas++;
-            filas.push({ num: i, nombre, kwh, monto: total });
-            // Agrega los datos de esta tienda al array para el gráfico
+
+            datosTiendas.push({ i, nombre, lecturaActual, kwh });
         }
 
-        // Actualiza la fila de totales
-        document.getElementById('totalGeneral').innerHTML = '<strong>' + totalGeneral.toFixed(2) + ' Bs</strong>';
+        const inputFactura = document.getElementById('monto-factura');
+        const montoFactura = parseFloat(inputFactura ? inputFactura.value : 0) || 0;
+        const precioPorKwh = totalKwh > 0 ? (montoFactura / totalKwh) : 0;
+
+        let filas = [];
+
+        for (let dato of datosTiendas) {
+            const total = dato.kwh * precioPorKwh;
+            
+            const kwhEl = document.getElementById(`kwh-${dato.i}`);
+            const totalEl = document.getElementById(`total-${dato.i}`);
+            
+            kwhEl.textContent = dato.kwh.toFixed(1) + ' kWh';
+            totalEl.textContent = total.toFixed(2) + ' Bs';
+
+            kwhEl.dataset.kwh = dato.kwh;
+            totalEl.dataset.total = total;
+
+            filas.push({ num: dato.i, nombre: dato.nombre, kwh: dato.kwh, monto: total });
+        }
+
+        document.getElementById('totalGeneral').innerHTML = '<strong>' + montoFactura.toFixed(2) + ' Bs</strong>';
         document.getElementById('totalKwh').innerHTML = '<strong>' + totalKwh.toFixed(1) + ' kWh</strong>';
 
-        // Actualiza las tarjetas de resumen
-        document.getElementById('res-total').textContent = totalGeneral.toFixed(2) + ' Bs';
+        document.getElementById('res-total').textContent = montoFactura.toFixed(2) + ' Bs';
         document.getElementById('res-kwh').textContent = totalKwh.toFixed(1);
-        document.getElementById('res-prom').textContent = tiendas > 0 ? (totalGeneral / tiendas).toFixed(2) + ' Bs' : '0 Bs';
-        // Promedio = total / cantidad de tiendas con datos
+        document.getElementById('res-prom').innerHTML = tiendas > 0 
+            ? (montoFactura / tiendas).toFixed(2) + ' Bs <span style="font-size:0.6rem;display:block;margin-top:2px;">(' + precioPorKwh.toFixed(2) + ' Bs/kWh)</span>' 
+            : '0 Bs';
 
-        actualizarGrafico(filas); // Actualiza el gráfico de torta
+        actualizarGrafico(filas);
 
-        // Genera el reporte ordenado de mayor a menor consumo
         filas.sort((a, b) => b.kwh - a.kwh);
-        // .sort(): ordena el array. (a,b) => b.kwh - a.kwh ordena de mayor a menor
-
         document.getElementById('reporte').innerHTML = filas.map((f, rank) => `
             <div class="reporte-item">
                 <span class="reporte-num">${rank + 1}</span>
@@ -1452,8 +1430,6 @@
                 <span class="reporte-monto">${f.monto === 0 ? '— Bs' : f.monto.toFixed(2) + ' Bs'}</span>
             </div>
         `).join('');
-        // .map(): transforma cada elemento del array en HTML
-        // .join(''): une todos los HTMLs en un solo string
     }
 
     // ============================================================
@@ -1594,11 +1570,16 @@
         for (let i = 1; i <= cantidadTiendas; i++) {
             const input = document.getElementById(`lectura-${i}`);
             if (!input || !input.value) continue;
-            // Si el campo está vacío, no guarda esa tienda
 
             const nombreEl = document.querySelector(`#fila-${i} .td-nombre`);
             const nombre = nombreEl ? nombreEl.textContent.trim() : `Tienda ${i}`;
             const lectura = parseFloat(input.value) || 0;
+
+            const kwhEl = document.getElementById(`kwh-${i}`);
+            const totalEl = document.getElementById(`total-${i}`);
+            
+            const kwh = parseFloat(kwhEl.dataset.kwh) || 0;
+            const total = parseFloat(totalEl.dataset.total) || 0;
 
             await fetch('/api/guardar', {
                 method: 'POST',
@@ -1606,10 +1587,8 @@
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + TOKEN
                 },
-                body: JSON.stringify({ tienda: nombre, lectura, mes })
-                // Envía: nombre de tienda, lectura actual y mes al servidor
+                body: JSON.stringify({ tienda: nombre, lectura, mes, kwh, total })
             });
-            // El servidor calcula los kWh y el total, y guarda todo en la BD
         }
 
         alert('✅ Datos guardados correctamente');

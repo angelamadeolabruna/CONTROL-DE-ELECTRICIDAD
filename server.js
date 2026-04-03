@@ -8,48 +8,7 @@ const PORT = process.env.PORT || 8080;
 const JWT_SECRET = process.env.JWT_SECRET || 'clave_secreta_electricidad_2024';
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
-// Función para calcular tarifa CRE acumulativa (Santa Cruz)
-function calcularTarifaCRE(kwh) {
-    if (kwh <= 0) return 0;
-    if (kwh <= 15) return 13.73; // cargo mínimo fijo
-
-    let total = 0;
-
-    // Tramo 1: primeros 15 kWh → mínimo fijo
-    total += 13.73;
-
-    // Tramo 2: kWh 16 a 120 → Bs 0.758 por kWh
-    if (kwh > 15) {
-        const tramo = Math.min(kwh, 120) - 15;
-        total += tramo * 0.758;
-    }
-
-    // Tramo 3: kWh 121 a 300 → Bs 0.969 por kWh
-    if (kwh > 120) {
-        const tramo = Math.min(kwh, 300) - 120;
-        total += tramo * 0.969;
-    }
-
-    // Tramo 4: kWh 301 a 500 → Bs 1.020 por kWh
-    if (kwh > 300) {
-        const tramo = Math.min(kwh, 500) - 300;
-        total += tramo * 1.020;
-    }
-
-    // Tramo 5: kWh 501 a 1000 → Bs 1.068 por kWh
-    if (kwh > 500) {
-        const tramo = Math.min(kwh, 1000) - 500;
-        total += tramo * 1.068;
-    }
-
-    // Tramo 6: más de 1000 kWh → Bs 1.479 por kWh
-    if (kwh > 1000) {
-        const tramo = kwh - 1000;
-        total += tramo * 1.479;
-    }
-
-    return parseFloat(total.toFixed(2));
-}
+// Función calcularTarifaCRE eliminada porque el cálculo ahora es dinámico proporcional en el frontend.
 
 // Función para enviar email con Resend
 async function enviarEmail(to, subject, html) {
@@ -212,27 +171,20 @@ app.post('/api/cambiar-password', verificarToken, (req, res) => {
 });
 
 app.post('/api/guardar', verificarToken, (req, res) => {
-    const { tienda, lectura, mes } = req.body;
-    db.query('SELECT lectura FROM registros WHERE tienda = ? ORDER BY mes DESC LIMIT 1', [tienda], (err, resultados) => {
+    const { tienda, lectura, mes, kwh, total } = req.body;
+    db.query('SELECT id FROM registros WHERE tienda = ? AND mes = ?', [tienda, mes], (err, existe) => {
         if (err) return res.json({ error: err });
-        let lecturaAnterior = resultados.length > 0 ? parseFloat(resultados[0].lectura) : 0;
-        let kwh = Math.max(0, lectura - lecturaAnterior);
-        const PRECIO_KWH = 2;
-        const total = kwh * PRECIO_KWH;
-        db.query('SELECT id FROM registros WHERE tienda = ? AND mes = ?', [tienda, mes], (err, existe) => {
-            if (err) return res.json({ error: err });
-            if (existe.length > 0) {
-                db.query('UPDATE registros SET lectura = ?, kwh = ?, total = ? WHERE tienda = ? AND mes = ?', [lectura, kwh, total, tienda, mes], (err) => {
-                    if (err) return res.json({ error: err });
-                    res.json({ mensaje: 'Actualizado ✅', kwh, total });
-                });
-            } else {
-                db.query('INSERT INTO registros (tienda, lectura, kwh, total, mes) VALUES (?, ?, ?, ?, ?)', [tienda, lectura, kwh, total, mes], (err) => {
-                    if (err) return res.json({ error: err });
-                    res.json({ mensaje: 'Guardado ✅', kwh, total });
-                });
-            }
-        });
+        if (existe.length > 0) {
+            db.query('UPDATE registros SET lectura = ?, kwh = ?, total = ? WHERE tienda = ? AND mes = ?', [lectura, kwh, total, tienda, mes], (err) => {
+                if (err) return res.json({ error: err });
+                res.json({ mensaje: 'Actualizado ✅', kwh, total });
+            });
+        } else {
+            db.query('INSERT INTO registros (tienda, lectura, kwh, total, mes) VALUES (?, ?, ?, ?, ?)', [tienda, lectura, kwh, total, mes], (err) => {
+                if (err) return res.json({ error: err });
+                res.json({ mensaje: 'Guardado ✅', kwh, total });
+            });
+        }
     });
 });
 
