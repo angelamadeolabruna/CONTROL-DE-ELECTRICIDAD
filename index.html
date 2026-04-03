@@ -1382,13 +1382,13 @@
 
         let energia = 0;
         if (kwh <= 15) {
-            energia = 14.5;
+            energia = 24.3; // Tarifa fija actualizada 2026
         } else {
-            energia += 14.5;
+            energia += 24.3;
             if (kwh > 15) energia += Math.min(kwh - 15, 105) * 0.85; // 16 a 120
             if (kwh > 120) energia += Math.min(kwh - 120, 180) * 1.05; // 121 a 300
             if (kwh > 300) energia += Math.min(kwh - 300, 200) * 1.12; // 301 a 500
-            if (kwh > 500) energia += Math.min(kwh - 500, 500) * 1.19; // 501 a 1000
+            if (kwh > 500) energia += Math.min(kwh - 500, 500) * 1.187; // 501 a 1000
             if (kwh > 1000) energia += (kwh - 1000) * 1.55; 
         }
 
