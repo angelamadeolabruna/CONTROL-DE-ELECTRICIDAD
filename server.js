@@ -103,7 +103,7 @@ app.post('/api/login', (req, res) => {
         const user = rows[0];
         if (!bcrypt.compareSync(password, user.password_hash))
             return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
-        const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '8h' });
+        const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '30d' });
         res.json({ token, username: user.username });
     });
 });
