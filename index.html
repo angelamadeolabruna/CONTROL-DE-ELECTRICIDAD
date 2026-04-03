@@ -1339,8 +1339,10 @@
             <!-- contenteditable="true": el usuario puede hacer clic y editar el nombre -->
             <!-- spellcheck="false": no marca errores de ortografía -->
 
-            <td class="td-lectura-ant" id="ant-${num}">—</td>
-            <!-- Lectura anterior (se carga desde la base de datos) -->
+            <td class="td-lectura-ant">
+                <input type="number" id="ant-${num}" class="mes-input" oninput="calcular()" placeholder="0" min="0" style="width: 80px; padding: 0.2rem; font-size: 0.9rem;">
+            </td>
+            <!-- Lectura anterior (editable para el primer mes, o se carga de BD) -->
 
             <td><input type="number" id="lectura-${num}" oninput="calcular()" placeholder="0" min="0"></td>
             <!-- Campo donde el usuario ingresa la lectura actual -->
@@ -1380,7 +1382,9 @@
             const lecturaActual = parseFloat(input.value) || 0;
             const nombreEl = document.querySelector(`#fila-${i} .td-nombre`);
             const nombre = nombreEl ? nombreEl.textContent.trim() : `Tienda ${i}`;
-            const lecturaAnterior = lecturasAnteriores[nombre] || 0;
+            
+            const antInput = document.getElementById(`ant-${i}`);
+            const lecturaAnterior = antInput && antInput.value !== '' ? parseFloat(antInput.value) : (lecturasAnteriores[nombre] || 0);
 
             const kwh = Math.max(0, lecturaActual - lecturaAnterior);
             totalKwh += kwh;
@@ -1551,10 +1555,10 @@
                 const nombreEl = document.querySelector(`#fila-${i} .td-nombre`);
                 const nombre = nombreEl ? nombreEl.textContent.trim() : `Tienda ${i}`;
                 const antEl = document.getElementById(`ant-${i}`);
-                if (antEl) antEl.textContent = lecturasAnteriores[nombre] !== undefined
-                    ? lecturasAnteriores[nombre] + ' kWh'
-                    : '—';
-                // Si tiene lectura anterior, muestra el número. Si no, muestra "—"
+                if (antEl) {
+                    antEl.value = lecturasAnteriores[nombre] !== undefined ? lecturasAnteriores[nombre] : '';
+                }
+                // Si tiene lectura anterior la rellena, si no la deja en blanco para que el usuario la tipee
             }
 
             calcular(); // Recalcula con las nuevas lecturas anteriores
