@@ -964,9 +964,10 @@
     <div class="controls">
         <span class="mes-label">Mes de cobro:</span>
         <input type="month" id="mes-input" class="mes-input" onchange="cargarLecturasAnteriores()">
-        <span class="mes-label" style="margin-left: 1rem;">Total Factura (Bs):</span>
-        <input type="number" id="monto-factura" class="mes-input" placeholder="Ej: 768.20" oninput="calcular()" min="0" step="0.01" style="width: 120px;">
-        <button class="btn btn-ghost" style="margin-left: 5px; padding: 0.4rem 0.6rem; font-size: 0.8rem;" onclick="simularFacturaCRE()" title="Calcular aproximado según los kWh totales de CRE">⚡ Simular CRE</button>
+        <span class="mes-label" style="margin-left: 1rem;">Factura CRE (kWh):</span>
+        <input type="number" id="kwh-cre-input" class="mes-input" placeholder="Ej: 620" oninput="calcularDesdeKwh()" min="0" style="width: 100px;">
+        <span class="mes-label" style="margin-left: 1rem;">Total a Repartir (Bs):</span>
+        <input type="number" id="monto-factura" class="mes-input" placeholder="Ej: 768.20" oninput="calcular()" min="0" step="0.01" style="width: 110px;">
         <div class="spacer"></div>
         <button class="btn btn-primary" onclick="agregarTienda()">+ Agregar tienda</button>
         <!-- Agrega una fila nueva a la tabla -->
@@ -1371,12 +1372,13 @@
         return tr;
     }
 
-    function simularFacturaCRE() {
-        const kwhStr = prompt("Ingrese los kWh totales según la factura de CRE (ej: 527):");
-        if (!kwhStr) return;
-        const kwh = parseFloat(kwhStr);
-        if (isNaN(kwh) || kwh < 0) {
-            alert("Por favor ingrese un número válido.");
+    function calcularDesdeKwh() {
+        const kwhInput = document.getElementById('kwh-cre-input');
+        if (!kwhInput) return;
+        const kwh = parseFloat(kwhInput.value);
+        if (isNaN(kwh) || kwh <= 0) {
+            document.getElementById('monto-factura').value = '';
+            calcular();
             return;
         }
 
@@ -1398,16 +1400,10 @@
         if (kwh > 1000) aseo = 50;
 
         const totalBs = energia + alumbrado + aseo;
-
-        const msj = `--- SIMULADOR DE FACTURA CRE ---\n\nConsumo CRE: ${kwh} kWh\nImporte Energía: ${energia.toFixed(2)} Bs\nAlumbrado (8.7%): ${alumbrado.toFixed(2)} Bs\nAseo Urbano: ${aseo.toFixed(2)} Bs\n\n⚡ TOTAL APROXIMADO: ${totalBs.toFixed(2)} Bs\n\n¿Deseas usar este total aproximado para repartir a las tiendas?`;
-
-        if (confirm(msj)) {
-            const inputFactura = document.getElementById('monto-factura');
-            if (inputFactura) {
-                inputFactura.value = totalBs.toFixed(2);
-                calcular();
-            }
+        if (document.getElementById('monto-factura')) {
+            document.getElementById('monto-factura').value = totalBs.toFixed(2);
         }
+        calcular();
     }
 
     function calcular() {
