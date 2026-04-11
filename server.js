@@ -35,17 +35,24 @@ async function enviarEmail(to, subject, html) {
 app.use(express.json());
 app.use(express.static('./'));
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
     host: process.env.MYSQLHOST || '50412o.h.filess.io',
     user: process.env.MYSQLUSER || 'control_electricidad_hotdetail',
     password: process.env.MYSQLPASSWORD || '92591b731b32a07875a4e1cf51da61f6ccbc3ee3',
     database: process.env.MYSQLDATABASE || 'control_electricidad_hotdetail',
-    port: process.env.MYSQLPORT || 3307
+    port: process.env.MYSQLPORT || 3307,
+    waitForConnections: true,
+    connectionLimit: 5,
+    queueLimit: 0
 });
 
-db.connect((err) => {
-    if (err) { console.log('Error conectando a MySQL:', err); }
-    else { console.log('Conectado a MySQL ✅'); crearTablas(); }
+db.getConnection((err, connection) => {
+    if (err) { console.log('Error conectando a MySQL (Pool):', err); }
+    else { 
+        console.log('Conectado a MySQL (Pool) ✅'); 
+        crearTablas(); 
+        connection.release();
+    }
 });
 
 function crearTablas() {
