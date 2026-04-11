@@ -801,6 +801,39 @@
             position: relative;
             top: -2px; /* Ajuste fino de posición vertical */
         }
+
+        /* ── CRITERIOS Y NOTAS (IMPRESIÓN) ── */
+        .criterios-box {
+            background: #fafaf8;
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            page-break-inside: avoid;
+        }
+        .criterios-box h3 { margin-top: 0; color: var(--text); font-size: 1.05rem; margin-bottom: 0.8rem; }
+        .criterios-box ul { padding-left: 1.2rem; margin: 0; }
+        .criterios-box li { margin-bottom: 0.5rem; }
+        .criterios-box b { color: var(--text); }
+
+        @media print {
+            body, .main-wrapper, .main-content { background: white !important; color: black !important; padding: 0 !important; margin: 0 !important; }
+            .sidebar, .btn-guardar, .btn-imprimir, .controls, .btn-primary, .btn-ghost, .info-box, .logo-wrap { display: none !important; }
+            .main-content { width: 100% !important; margin-left: 0 !important; }
+            .grafico-card { display: none !important; }
+            .tabla-grafico-wrap { display: block !important; }
+            .table-wrap { overflow: visible !important; box-shadow: none !important; border: 1px solid #ddd !important; margin-bottom: 1rem !important; }
+            th, td { border-bottom: 1px solid #ddd !important; padding: 0.5rem !important; }
+            input { border: none !important; background: transparent !important; color: black !important; padding: 0 !important; width: 100% !important; text-align: center; }
+            .criterios-box { background: white !important; border: 1px solid #ddd !important; border-left: 4px solid #444 !important; color: black !important; margin-top: 1rem !important; }
+            .criterios-box b, .criterios-box h3 { color: black !important; }
+            .resumen { box-shadow: none !important; border: 1px solid #ddd !important; margin-top: 1rem !important; }
+            .resumen-card { background: white !important; }
+        }
     </style>
 </head>
 <body>
@@ -1050,6 +1083,16 @@
     </div>
     <div class="reporte-lista" id="reporte"></div>
     <!-- Lista de tiendas ordenadas de mayor a menor consumo, generada con JavaScript -->
+
+    <!-- NOTA EXPLICATIVA: Criterios de Repartición -->
+    <div class="criterios-box">
+        <h3>📄 Criterios de Repartición (Información para inquilinos)</h3>
+        <ul>
+            <li><b>Medidor Único Compartido:</b> Toda la propiedad comparte un único medidor principal ante la CRE.</li>
+            <li><b>Prorrateo 100% Equitativo:</b> Si el medidor de tu tienda registró el 20% del consumo interno total, se te cobra exactamente el 20% del monto total de la factura principal.</li>
+            <li><b>Inclusión de Tasas:</b> El "Total a Repartir" ya incluye el costo real de la energía eléctrica sumado a las tasas municipales (Alumbrado Público y Aseo Urbano) de la factura de CRE. Este monto se divide matemáticamente en proporción para asegurar transparencia y distribución justa.</li>
+        </ul>
+    </div>
 
 </div>
 </div>
