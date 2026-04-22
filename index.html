@@ -27,40 +27,39 @@
 
     <style>
     /* ============================================================
-       CSS — LOS ESTILOS VISUALES DE TODA LA PÁGINA
-       CSS define colores, tamaños, posiciones, animaciones, etc.
+       CSS — TEMA DARK ELÉCTRICO PREMIUM
        ============================================================ */
 
         :root {
-            /* :root define variables globales de CSS (como constantes) */
-            /* Así podemos reusar los mismos colores en todo el archivo */
-
-            --bg: #f8f8f6;          /* Color de fondo general (blanco hueso) */
-            --surface: #ffffff;     /* Color de las tarjetas y paneles (blanco puro) */
-            --border: #e8e8e4;      /* Color de bordes suaves */
-            --border-strong: #d0d0ca; /* Color de bordes más marcados */
-            --text: #111110;        /* Color del texto principal (casi negro) */
-            --text-muted: #888884;  /* Color del texto secundario (gris) */
-            --accent: #f0a500;      /* Color de acento: amarillo/dorado (el rayo) */
-            --accent-dark: #c88500; /* Versión más oscura del acento */
-            --green: #1a7a3a;       /* Verde para los totales y montos */
-            --green-light: #e8f5ec; /* Verde claro para fondos */
-            --red: #d63b2f;         /* Rojo para errores */
-            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);    /* Sombra suave */
-            --shadow-md: 0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.06); /* Sombra mediana */
+            --bg: #0f1923;
+            --bg-alt: #162231;
+            --surface: #1a2d42;
+            --surface-light: #1e3347;
+            --border: rgba(56, 189, 248, 0.12);
+            --border-strong: rgba(56, 189, 248, 0.25);
+            --text: #e8edf2;
+            --text-muted: #7a8fa6;
+            --accent: #38bdf8;
+            --accent-dark: #0ea5e9;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --green: #34d399;
+            --green-dark: #059669;
+            --green-light: rgba(52, 211, 153, 0.12);
+            --red: #f87171;
+            --yellow: #fbbf24;
+            --shadow: 0 2px 8px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.4), 0 12px 48px rgba(0,0,0,0.3);
+            --glass: rgba(26, 45, 66, 0.7);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        /* * afecta a TODOS los elementos */
-        /* box-sizing border-box: el tamaño incluye el borde y padding (más predecible) */
-        /* margin/padding 0: elimina espacios por defecto del navegador */
 
         body {
-            font-family: 'DM Sans', sans-serif; /* Fuente principal de todo el texto */
-            background: var(--bg);              /* Fondo general de la página */
-            color: var(--text);                 /* Color del texto */
-            min-height: 100vh;                  /* Mínimo 100% del alto de la pantalla */
-            padding: 2.5rem 1.5rem;             /* Espacio interno (arriba/abajo y lados) */
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
         }
 
         /* ══════════════════════════════════════
@@ -68,111 +67,111 @@
            ══════════════════════════════════════ */
 
         #pantalla-login {
-            display: flex;              /* Usa flexbox para centrar el contenido */
-            align-items: center;        /* Centra verticalmente */
-            justify-content: center;    /* Centra horizontalmente */
-            min-height: 100vh;          /* Ocupa toda la altura de la pantalla */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
             padding: 1.5rem;
-            margin: -2.5rem -1.5rem;    /* Compensa el padding del body */
+            margin: -2rem -1.5rem;
             background: var(--bg);
+            background-image:
+                radial-gradient(ellipse at 30% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 100%, rgba(52, 211, 153, 0.06) 0%, transparent 60%);
         }
 
         .login-card {
-            /* La tarjeta blanca del formulario de login */
             background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 20px;        /* Esquinas redondeadas */
-            padding: 2.5rem 2rem;       /* Espacio interno */
+            border: 1px solid var(--border-strong);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
             width: 100%;
-            max-width: 380px;           /* Máximo 380px de ancho */
-            box-shadow: var(--shadow-md); /* Sombra para dar profundidad */
+            max-width: 400px;
+            box-shadow: var(--shadow-md), 0 0 60px rgba(56, 189, 248, 0.05);
+            backdrop-filter: blur(12px);
         }
 
         .login-title {
-            /* Título grande "Control de Electricidad" en el login */
             font-family: 'Syne', sans-serif;
             font-size: 1.8rem;
             font-weight: 800;
-            letter-spacing: -0.03em;    /* Letras un poco más juntas */
+            letter-spacing: -0.03em;
             margin-bottom: 0.3rem;
+            color: var(--text);
         }
 
         .login-subtitle {
-            /* Subtítulo pequeño "Casa de Rojas Halan · Acceso privado" */
             font-family: 'DM Mono', monospace;
             font-size: 0.65rem;
-            text-transform: uppercase;  /* Todo en mayúsculas */
-            letter-spacing: 0.1em;      /* Letras más separadas */
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             color: var(--text-muted);
             margin-bottom: 2rem;
         }
 
         .login-field {
-            margin-bottom: 1rem; /* Espacio entre campos del formulario */
+            margin-bottom: 1rem;
         }
 
         .login-field label {
-            /* Etiquetas "USUARIO" y "CONTRASEÑA" */
             font-family: 'DM Mono', monospace;
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             color: var(--text-muted);
-            display: block;             /* Ocupa toda la línea */
+            display: block;
             margin-bottom: 0.4rem;
         }
 
         .login-field input {
-            /* Los campos de texto del formulario */
             width: 100%;
-            padding: 0.65rem 0.9rem;
+            padding: 0.7rem 0.9rem;
             border: 1.5px solid var(--border-strong);
-            border-radius: 9px;
+            border-radius: 10px;
             font-family: 'DM Sans', sans-serif;
             font-size: 0.95rem;
             color: var(--text);
             background: var(--bg);
-            transition: border-color 0.15s; /* Transición suave al enfocar */
+            transition: all 0.2s;
         }
 
         .login-field input:focus {
-            /* Cuando el usuario hace clic en el campo */
-            outline: none;              /* Elimina el borde azul por defecto del navegador */
-            border-color: var(--accent); /* Borde amarillo al enfocar */
-            background: white;
+            outline: none;
+            border-color: var(--accent);
+            background: var(--bg-alt);
+            box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
         .btn-login {
-            /* Botón "ENTRAR" del login */
             width: 100%;
-            padding: 0.75rem;
-            background: var(--text);    /* Fondo negro */
-            color: white;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+            color: var(--bg);
             border: none;
-            border-radius: 9px;
+            border-radius: 10px;
             font-family: 'DM Mono', monospace;
             font-size: 0.78rem;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             cursor: pointer;
-            transition: background 0.15s;
+            transition: all 0.2s;
             margin-top: 0.5rem;
         }
 
-        .btn-login:hover { background: var(--accent); color: var(--text); }
-        /* Al pasar el mouse: fondo amarillo, texto negro */
+        .btn-login:hover { 
+            transform: translateY(-1px); 
+            box-shadow: 0 4px 20px rgba(56, 189, 248, 0.4);
+        }
 
         .login-error {
-            /* Mensaje de error debajo del botón de login */
             color: var(--red);
             font-size: 0.82rem;
             margin-top: 0.75rem;
             text-align: center;
-            min-height: 1.2em; /* Reserva espacio aunque no haya error */
+            min-height: 1.2em;
         }
 
         .link-recuperar {
-            /* Link "¿Olvidaste tu contraseña?" */
             display: block;
             text-align: center;
             margin-top: 1.25rem;
@@ -183,58 +182,57 @@
             color: var(--text-muted);
             cursor: pointer;
             text-decoration: underline;
+            transition: color 0.15s;
         }
 
         .link-recuperar:hover { color: var(--accent); }
 
         /* ══════════════════════════════════════
            PANTALLA RECUPERAR CONTRASEÑA
-           (inicialmente oculta, display:none)
            ══════════════════════════════════════ */
 
         #pantalla-recuperar {
-            display: none;              /* OCULTA por defecto */
+            display: none;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 1.5rem;
-            margin: -2.5rem -1.5rem;
+            margin: -2rem -1.5rem;
             background: var(--bg);
+            background-image:
+                radial-gradient(ellipse at 30% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 100%, rgba(52, 211, 153, 0.06) 0%, transparent 60%);
         }
 
         /* ══════════════════════════════════════
            PANTALLA PRINCIPAL DE LA APP
-           (inicialmente oculta, display:none)
            ══════════════════════════════════════ */
 
-        #pantalla-app { display: none; } /* OCULTA por defecto hasta que se loguee */
+        #pantalla-app { display: none; }
 
-        .page { max-width: 960px; margin: 0 auto; }
-        /* Centra el contenido y lo limita a 960px de ancho */
+        .page { max-width: 1200px; margin: 0 auto; }
 
-        /* ── HEADER (la barra superior con el título) ── */
+        /* ── HEADER ── */
         .header {
             display: flex;
-            justify-content: space-between; /* Título a la izq, botones a la der */
+            justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 2.5rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border); /* Línea divisora abajo */
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
         }
 
         .header-left h1 {
-            /* Título "Control de Electricidad" con el rayo */
             font-family: 'Syne', sans-serif;
             font-weight: 800;
-            font-size: 2.6rem;
+            font-size: 2.4rem;
             letter-spacing: -0.03em;
             line-height: 1;
             color: var(--text);
         }
 
         .header-left .subtitle {
-            /* "Sistema de gestión de consumo · Casa de Rojas Halan" */
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-family: 'DM Mono', monospace;
             color: var(--text-muted);
             margin-top: 0.5rem;
@@ -243,24 +241,22 @@
         }
 
         .header-right {
-            /* Columna derecha: badge de tarifa + botones */
             display: flex;
-            flex-direction: column;     /* Apila los elementos verticalmente */
-            align-items: flex-end;      /* Alineados a la derecha */
+            flex-direction: column;
+            align-items: flex-end;
             gap: 0.5rem;
         }
 
         .precio-badge {
-            /* El badge negro que dice "Tarifa CRE · Domiciliaria / Escalonada" */
-            background: var(--text);
-            color: white;
+            background: linear-gradient(135deg, var(--surface-light), var(--surface));
+            border: 1px solid var(--border-strong);
+            color: var(--text);
             padding: 0.75rem 1.25rem;
             border-radius: 12px;
             text-align: right;
         }
 
         .precio-badge .label {
-            /* Texto pequeño "TARIFA CRE · DOMICILIARIA" */
             font-family: 'DM Mono', monospace;
             font-size: 0.6rem;
             text-transform: uppercase;
@@ -271,7 +267,6 @@
         }
 
         .precio-badge .valor {
-            /* Texto dorado grande "Escalonada" */
             font-family: 'Syne', sans-serif;
             font-size: 1rem;
             font-weight: 700;
@@ -280,7 +275,6 @@
         }
 
         .btn-salir {
-            /* Botones pequeños "Cerrar sesión" y "Cambiar contraseña" */
             font-family: 'DM Mono', monospace;
             font-size: 0.62rem;
             text-transform: uppercase;
@@ -295,19 +289,21 @@
         }
 
         .btn-salir:hover { border-color: var(--red); color: var(--red); }
-        /* Al hover: borde y texto rojos */
 
-        /* ── CONTROLES: selector de mes y botones ── */
+        /* ── CONTROLES ── */
         .controls {
             display: flex;
             align-items: center;
             gap: 1rem;
             margin-bottom: 1rem;
-            flex-wrap: wrap; /* En pantallas chicas, los elementos se apilan */
+            flex-wrap: wrap;
+            background: var(--surface);
+            padding: 1rem 1.25rem;
+            border-radius: 14px;
+            border: 1px solid var(--border);
         }
 
         .mes-label {
-            /* Etiqueta "MES DE COBRO:" */
             font-family: 'DM Mono', monospace;
             font-size: 0.7rem;
             text-transform: uppercase;
@@ -316,25 +312,22 @@
         }
 
         .mes-input {
-            /* El selector de mes (input type="month") */
             font-family: 'DM Mono', monospace;
             font-size: 0.85rem;
             border: 1.5px solid var(--border-strong);
             padding: 0.45rem 0.85rem;
             border-radius: 8px;
-            background: var(--surface);
+            background: var(--bg);
             color: var(--text);
             cursor: pointer;
-            transition: border-color 0.15s;
+            transition: all 0.15s;
         }
 
-        .mes-input:focus { outline: none; border-color: var(--accent); }
+        .mes-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 
         .spacer { flex: 1; }
-        /* Empuja los botones "+ Agregar tienda" y "Limpiar" hacia la derecha */
 
         .btn {
-            /* Estilo base para botones generales */
             font-family: 'DM Mono', monospace;
             font-size: 0.72rem;
             text-transform: uppercase;
@@ -342,21 +335,23 @@
             padding: 0.5rem 1.1rem;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all 0.2s;
             border: 1.5px solid transparent;
         }
 
         .btn-primary {
-            /* Botón negro "+ Agregar tienda" */
-            background: var(--text);
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent));
             color: var(--bg);
-            border-color: var(--text);
+            border-color: var(--accent);
+            font-weight: 600;
         }
 
-        .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: var(--text); }
+        .btn-primary:hover { 
+            transform: translateY(-1px); 
+            box-shadow: 0 4px 16px rgba(56, 189, 248, 0.3);
+        }
 
         .btn-ghost {
-            /* Botón outline "Limpiar lecturas" */
             background: transparent;
             color: var(--text-muted);
             border-color: var(--border-strong);
@@ -366,35 +361,30 @@
 
         /* ── CAJA DE INFORMACIÓN ── */
         .info-box {
-            /* El recuadro amarillo con el mensaje explicativo */
-            background: #fffbf0;
-            border: 1px solid #f0d080;
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
+            background: rgba(56, 189, 248, 0.06);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 0.85rem 1.1rem;
             font-size: 0.82rem;
-            color: #7a6020;
+            color: var(--accent);
             margin-bottom: 1.25rem;
         }
 
         /* ── TABLA DE TIENDAS ── */
         .table-wrap {
-            /* Contenedor de la tabla con bordes redondeados */
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            overflow: hidden;           /* Oculta los bordes que sobresalen */
+            border-radius: 16px;
+            overflow: hidden;
             box-shadow: var(--shadow);
             margin-bottom: 1.25rem;
         }
 
         table { width: 100%; border-collapse: collapse; }
-        /* border-collapse: elimina el espacio doble entre celdas */
 
-        thead tr { background: var(--bg); border-bottom: 1px solid var(--border); }
-        /* Encabezado de la tabla con fondo gris suave */
+        thead tr { background: var(--bg-alt); border-bottom: 1px solid var(--border); }
 
         th {
-            /* Celdas del encabezado: #, Tienda, Lectura anterior, etc. */
             font-family: 'DM Mono', monospace;
             font-size: 0.65rem;
             text-transform: uppercase;
@@ -405,110 +395,94 @@
             font-weight: 500;
         }
 
-        td { padding: 0.75rem 1.1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        /* Celdas del cuerpo de la tabla */
+        td { padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
 
         tbody tr:last-child td { border-bottom: none; }
-        /* La última fila no tiene borde inferior */
 
-        tbody tr:hover { background: #fafaf8; }
-        /* Al pasar el mouse por una fila, fondo levemente gris */
+        tbody tr:hover { background: var(--surface-light); }
 
-        /* Estilos específicos por tipo de columna */
         .td-num { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text-muted); width: 40px; }
-        /* Columna "#": número de tienda */
-
-        .td-nombre { font-weight: 500; }
-        /* Columna "Tienda": nombre editable */
-
+        .td-nombre { font-weight: 500; color: var(--text); }
         .td-lectura-ant { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: var(--text-muted); }
-        /* Columna "Lectura anterior": en gris porque es solo referencia */
+        .td-kwh { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--accent); font-weight: 500; }
+        .td-total { font-family: 'DM Mono', monospace; font-weight: 600; color: var(--green); }
 
-        .td-kwh { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--text); font-weight: 500; }
-        /* Columna "kWh consumidos" */
-
-        .td-total { font-family: 'DM Mono', monospace; font-weight: 500; color: var(--green); }
-        /* Columna "Total en Bs": en verde */
-
-        .row-total { background: var(--text) !important; }
-        /* Fila de totales: fondo negro */
-
-        .row-total td { color: white; font-weight: 600; border-bottom: none; }
-        .row-total .td-total { color: var(--accent); font-size: 1rem; }
-        /* Total general en amarillo dorado */
-
-        .row-total .td-kwh { color: white; }
+        .row-total { background: linear-gradient(135deg, var(--bg-alt), var(--bg)) !important; }
+        .row-total td { color: var(--text); font-weight: 600; border-bottom: none; }
+        .row-total .td-total { color: var(--yellow); font-size: 1.05rem; text-shadow: 0 0 12px rgba(251, 191, 36, 0.3); }
+        .row-total .td-kwh { color: var(--accent); }
 
         input[type="number"] {
-            /* Los campos donde se ingresa la lectura del medidor */
             width: 120px;
-            padding: 0.4rem 0.7rem;
+            padding: 0.45rem 0.7rem;
             border: 1.5px solid var(--border-strong);
-            border-radius: 7px;
+            border-radius: 8px;
             font-family: 'DM Mono', monospace;
             font-size: 0.85rem;
             color: var(--text);
             background: var(--bg);
-            transition: border-color 0.15s, background 0.15s;
+            transition: all 0.2s;
         }
 
-        input[type="number"]:focus { outline: none; border-color: var(--accent); background: white; }
+        input[type="number"]:focus { 
+            outline: none; 
+            border-color: var(--accent); 
+            background: var(--bg-alt); 
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
 
         input[type="number"]::-webkit-inner-spin-button { opacity: 0; }
-        /* Oculta las flechas de incremento/decremento del input numérico */
 
         .btn-guardar {
-            /* Botón verde grande "GUARDAR MES" */
             width: 100%;
-            padding: 0.85rem;
-            background: var(--green);
+            padding: 0.9rem;
+            background: linear-gradient(135deg, var(--green-dark), var(--green));
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-family: 'DM Mono', monospace;
             font-size: 0.8rem;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             cursor: pointer;
-            transition: background 0.15s;
+            transition: all 0.2s;
             margin-bottom: 2rem;
         }
 
-        .btn-guardar:hover { background: #145c2c; }
-        /* Al hover: verde más oscuro */
+        .btn-guardar:hover { 
+            transform: translateY(-1px); 
+            box-shadow: 0 4px 20px rgba(52, 211, 153, 0.3);
+        }
 
         /* ── TARJETAS DE RESUMEN ── */
         .resumen {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin-bottom: 2rem;
         }
 
         .resumen-card {
-            /* Cada tarjeta: "Total a cobrar", "kWh totales", "Promedio" */
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 1.25rem 1.4rem;
             box-shadow: var(--shadow);
-            transition: box-shadow 0.2s, transform 0.2s;
+            transition: all 0.25s;
         }
 
-        .resumen-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-        /* Al hover: sube 2px y sombra más pronunciada */
+        .resumen-card:hover { 
+            box-shadow: var(--shadow-md); 
+            transform: translateY(-3px);
+            border-color: var(--border-strong);
+        }
 
-        .resumen-card:first-child { border-left: 3px solid var(--accent); }
-        /* Primera tarjeta: borde izquierdo dorado */
-
-        .resumen-card:nth-child(2) { border-left: 3px solid var(--text); }
-        /* Segunda tarjeta: borde izquierdo negro */
-
+        .resumen-card:first-child { border-left: 3px solid var(--yellow); }
+        .resumen-card:nth-child(2) { border-left: 3px solid var(--accent); }
         .resumen-card:nth-child(3) { border-left: 3px solid var(--green); }
-        /* Tercera tarjeta: borde izquierdo verde */
 
         .resumen-label {
-            /* Etiqueta pequeña "TOTAL A COBRAR" etc. */
             font-family: 'DM Mono', monospace;
             font-size: 0.62rem;
             text-transform: uppercase;
@@ -519,7 +493,6 @@
         }
 
         .resumen-valor {
-            /* Número grande del resumen */
             font-family: 'Syne', sans-serif;
             font-size: 1.8rem;
             font-weight: 700;
@@ -530,7 +503,7 @@
         /* ── SECCIÓN REPORTE ── */
         .reporte-header {
             display: flex;
-            justify-content: space-between; /* Título a la izq, botón imprimir a la der */
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
         }
@@ -540,10 +513,10 @@
             font-size: 1.3rem;
             font-weight: 700;
             letter-spacing: -0.02em;
+            color: var(--text);
         }
 
         .btn-imprimir {
-            /* Botón "Imprimir / PDF" */
             font-family: 'DM Mono', monospace;
             font-size: 0.68rem;
             text-transform: uppercase;
@@ -557,63 +530,57 @@
             transition: all 0.15s;
         }
 
-        .btn-imprimir:hover { background: var(--text); color: white; border-color: var(--text); }
+        .btn-imprimir:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
 
         .reporte-lista {
-            /* Lista de tiendas ordenadas por consumo */
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 16px;
             overflow: hidden;
             box-shadow: var(--shadow);
         }
 
         .reporte-item {
-            /* Cada fila del reporte: posición, nombre, kWh, monto */
             display: grid;
-            grid-template-columns: 28px 1fr auto auto; /* 4 columnas */
+            grid-template-columns: 28px 1fr auto auto;
             align-items: center;
             gap: 1rem;
             padding: 0.9rem 1.25rem;
             border-bottom: 1px solid var(--border);
-            transition: background 0.1s;
+            transition: background 0.15s;
         }
 
         .reporte-item:last-child { border-bottom: none; }
-        .reporte-item:hover { background: #fafaf8; }
+        .reporte-item:hover { background: var(--surface-light); }
 
-        .reporte-num { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--accent); }
-        /* Número de posición en el ranking (1, 2, 3...) en dorado */
-
-        .reporte-nombre { font-weight: 500; font-size: 0.9rem; }
+        .reporte-num { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--yellow); }
+        .reporte-nombre { font-weight: 500; font-size: 0.9rem; color: var(--text); }
         .reporte-kwh { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text-muted); }
         .reporte-monto { font-family: 'DM Mono', monospace; font-size: 0.9rem; font-weight: 500; color: var(--green); min-width: 80px; text-align: right; }
 
         .section-divider { height: 1px; background: var(--border); margin: 2rem 0; }
-        /* Línea separadora entre secciones */
 
-        /* ── MODAL CAMBIAR CONTRASEÑA ── */
+        /* ── MODAL ── */
         .modal-overlay {
-            /* El fondo oscuro semitransparente que cubre toda la pantalla */
-            display: none;              /* OCULTO por defecto */
-            position: fixed;            /* Fijo en la pantalla (no se mueve con el scroll) */
-            inset: 0;                   /* Ocupa toda la pantalla (top/right/bottom/left: 0) */
-            background: rgba(0,0,0,0.4); /* Negro con 40% de transparencia */
-            z-index: 100;               /* Encima de todo lo demás */
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
             align-items: center;
             justify-content: center;
         }
 
         .modal-overlay.active { display: flex; }
-        /* Cuando se le agrega la clase "active", se muestra */
 
         .modal-card {
-            /* La tarjeta blanca del modal */
-            background: white;
-            border-radius: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border-strong);
+            border-radius: 20px;
             padding: 2rem;
             width: 100%;
-            max-width: 360px;
+            max-width: 380px;
             box-shadow: var(--shadow-md);
         }
 
@@ -622,15 +589,15 @@
             font-size: 1.2rem;
             font-weight: 700;
             margin-bottom: 1.25rem;
+            color: var(--text);
         }
 
         .modal-error { color: var(--red); font-size: 0.82rem; margin-top: 0.5rem; min-height: 1.2em; }
 
         .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
-        /* Botones "Cancelar" y "Guardar" lado a lado */
 
         .btn-cancelar {
-            flex: 1; /* Ocupa la mitad del espacio */
+            flex: 1;
             padding: 0.65rem;
             background: transparent;
             border: 1.5px solid var(--border-strong);
@@ -645,18 +612,19 @@
         .btn-confirmar {
             flex: 1;
             padding: 0.65rem;
-            background: var(--text);    /* Fondo negro */
-            color: white;
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+            color: var(--bg);
             border: none;
             border-radius: 8px;
             font-family: 'DM Mono', monospace;
             font-size: 0.72rem;
+            font-weight: 600;
             text-transform: uppercase;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .btn-confirmar:hover { background: var(--green); }
-        /* Al hover: fondo verde */
+        .btn-confirmar:hover { box-shadow: 0 4px 16px rgba(56, 189, 248, 0.3); }
 
         /* ── ANIMACIÓN DEL RAYO ── */
         .login-bolt {
@@ -666,62 +634,55 @@
         }
 
         .bolt-svg {
-            width: 52px;
-            height: 52px;
-            filter: drop-shadow(0 0 8px rgba(240, 165, 0, 0.5)); /* Brillo dorado */
-            animation: bolt-pulse 2s ease-in-out infinite; /* Animación continua */
+            width: 56px;
+            height: 56px;
+            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.6));
+            animation: bolt-pulse 2s ease-in-out infinite;
         }
 
         @keyframes bolt-pulse {
-            /* Define la animación "pulso" del rayo */
             0%, 100% {
-                filter: drop-shadow(0 0 6px rgba(240, 165, 0, 0.4));
-                transform: scale(1); /* Tamaño normal */
+                filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
+                transform: scale(1);
             }
             50% {
-                filter: drop-shadow(0 0 18px rgba(240, 165, 0, 0.95)); /* Brillo máximo */
-                transform: scale(1.1); /* 10% más grande */
+                filter: drop-shadow(0 0 24px rgba(56, 189, 248, 0.95));
+                transform: scale(1.12);
             }
-            /* El rayo "respira": se achica, crece, y vuelve a achicarse */
         }
 
         .login-bg-pattern {
-            /* Fondo con gradientes radiales sutiles (manchas doradas difusas) */
             position: fixed;
             inset: 0;
-            pointer-events: none;       /* No interfiere con los clics */
+            pointer-events: none;
             overflow: hidden;
             z-index: 0;
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(240,165,0,0.06) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(240,165,0,0.04) 0%, transparent 50%);
+            background-image:
+                radial-gradient(circle at 15% 25%, rgba(56, 189, 248, 0.07) 0%, transparent 50%),
+                radial-gradient(circle at 85% 75%, rgba(52, 211, 153, 0.05) 0%, transparent 50%);
         }
 
         #pantalla-login, #pantalla-recuperar { position: relative; }
         .login-card { position: relative; z-index: 1; }
-        /* z-index:1 asegura que la tarjeta esté encima del fondo decorativo */
 
         /* ── LAYOUT TABLA + GRÁFICO ── */
         .tabla-grafico-wrap {
-            /* Contenedor que pone la tabla y el gráfico lado a lado */
             display: grid;
-            grid-template-columns: 1fr 320px; /* Tabla ocupa el resto, gráfico 320px */
+            grid-template-columns: 1fr 300px;
             gap: 1.25rem;
             margin-bottom: 1.25rem;
             align-items: start;
         }
 
         .grafico-card {
-            /* Tarjeta del gráfico de torta */
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 1.25rem 1.4rem;
             box-shadow: var(--shadow);
         }
 
         .grafico-title {
-            /* Título "⚡ CONSUMO POR TIENDA" */
             font-family: 'DM Mono', monospace;
             font-size: 0.65rem;
             text-transform: uppercase;
@@ -733,11 +694,10 @@
         .grafico-canvas-wrap {
             position: relative;
             width: 100%;
-            aspect-ratio: 1; /* Mantiene proporciones cuadradas */
+            aspect-ratio: 1;
         }
 
         .grafico-legend {
-            /* Leyenda debajo del gráfico: colores y porcentajes */
             margin-top: 1rem;
             display: flex;
             flex-direction: column;
@@ -752,30 +712,28 @@
         }
 
         .legend-dot {
-            /* El circulito de color de cada tienda en la leyenda */
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            flex-shrink: 0; /* No se encoge */
+            flex-shrink: 0;
         }
 
         .legend-nombre {
             flex: 1;
             font-weight: 500;
-            white-space: nowrap;        /* No hace salto de línea */
+            white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;    /* Si es muy largo, muestra "..." */
+            text-overflow: ellipsis;
+            color: var(--text);
         }
 
         .legend-pct {
-            /* Porcentaje de cada tienda en la leyenda */
             font-family: 'DM Mono', monospace;
             font-size: 0.72rem;
             color: var(--text-muted);
         }
 
         .grafico-empty {
-            /* Mensaje "SIN DATOS AÚN" cuando no hay lecturas */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -787,28 +745,29 @@
             letter-spacing: 0.08em;
         }
 
-        @media (max-width: 700px) {
+        @media (max-width: 800px) {
             .tabla-grafico-wrap { grid-template-columns: 1fr; }
+            .resumen { grid-template-columns: 1fr; }
         }
-        /* En pantallas menores a 700px, tabla y gráfico se apilan verticalmente */
 
         .header-bolt {
-            /* El rayo pequeño en el título principal de la app */
             display: inline-block;
             vertical-align: middle;
             margin-right: 0.4rem;
             animation: bolt-pulse 2.5s ease-in-out infinite;
             position: relative;
-            top: -2px; /* Ajuste fino de posición vertical */
+            top: -2px;
         }
 
-        /* ── CRITERIOS Y NOTAS (IMPRESIÓN) ── */
+        /* ── CRITERIOS Y NOTAS ── */
         .criterios-box {
-            background: #fafaf8;
+            background: var(--surface);
+            border-left: 4px solid var(--accent);
+            border: 1px solid var(--border);
             border-left: 4px solid var(--accent);
             padding: 1.5rem;
             margin-top: 2rem;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 0.9rem;
             color: var(--text-muted);
             line-height: 1.6;
@@ -818,7 +777,7 @@
         .criterios-box h3 { margin-top: 0; color: var(--text); font-size: 1.05rem; margin-bottom: 0.8rem; }
         .criterios-box ul { padding-left: 1.2rem; margin: 0; }
         .criterios-box li { margin-bottom: 0.5rem; }
-        .criterios-box b { color: var(--text); }
+        .criterios-box b { color: var(--accent); }
 
         @media print {
             body, .main-wrapper, .main-content { background: white !important; color: black !important; padding: 0 !important; margin: 0 !important; }
@@ -826,13 +785,21 @@
             .main-content { width: 100% !important; margin-left: 0 !important; }
             .grafico-card { display: none !important; }
             .tabla-grafico-wrap { display: block !important; }
-            .table-wrap { overflow: visible !important; box-shadow: none !important; border: 1px solid #ddd !important; margin-bottom: 1rem !important; }
+            .table-wrap { overflow: visible !important; box-shadow: none !important; border: 1px solid #ddd !important; margin-bottom: 1rem !important; background: white !important; }
+            table, thead, tbody, tr, th, td { background: white !important; color: black !important; }
             th, td { border-bottom: 1px solid #ddd !important; padding: 0.5rem !important; }
             input { border: none !important; background: transparent !important; color: black !important; padding: 0 !important; width: 100% !important; text-align: center; }
             .criterios-box { background: white !important; border: 1px solid #ddd !important; border-left: 4px solid #444 !important; color: black !important; margin-top: 1rem !important; }
             .criterios-box b, .criterios-box h3 { color: black !important; }
-            .resumen { box-shadow: none !important; border: 1px solid #ddd !important; margin-top: 1rem !important; }
-            .resumen-card { background: white !important; }
+            .resumen { box-shadow: none !important; margin-top: 1rem !important; }
+            .resumen-card { background: white !important; border: 1px solid #ddd !important; color: black !important; }
+            .resumen-valor, .resumen-label { color: black !important; }
+            .header { border-bottom-color: #ddd !important; }
+            .header-left h1, .precio-badge, .precio-badge .valor { color: black !important; }
+            .row-total { background: #f0f0f0 !important; }
+            .row-total td, .row-total .td-total, .row-total .td-kwh { color: black !important; text-shadow: none !important; }
+            .td-total, .td-kwh { color: black !important; }
+            .page { max-width: 100% !important; }
         }
     </style>
 </head>
@@ -854,15 +821,14 @@
         <div class="login-bolt">
             <svg class="bolt-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <!-- SVG: gráfico vectorial del rayo (dibujado con código) -->
-                <polygon points="28,4 12,26 22,26 20,44 36,22 26,22" fill="#f0a500" stroke="#c88500" stroke-width="1.5" stroke-linejoin="round"/>
-                <!-- Polígono principal del rayo en color dorado -->
+                <polygon points="28,4 12,26 22,26 20,44 36,22 26,22" fill="#38bdf8" stroke="#0ea5e9" stroke-width="1.5" stroke-linejoin="round"/>
+                <!-- Polígono principal del rayo en color cyan eléctrico -->
                 <polygon points="28,4 12,26 22,26 20,44 36,22 26,22" fill="url(#boltGrad)" opacity="0.8"/>
                 <!-- Segunda capa con gradiente para dar profundidad -->
                 <defs>
                     <linearGradient id="boltGrad" x1="12" y1="4" x2="36" y2="44" gradientUnits="userSpaceOnUse">
-                        <!-- Gradiente: de amarillo claro arriba a dorado abajo -->
-                        <stop offset="0%" stop-color="#ffe066"/>
-                        <stop offset="100%" stop-color="#f0a500"/>
+                        <stop offset="0%" stop-color="#7dd3fc"/>
+                        <stop offset="100%" stop-color="#0ea5e9"/>
                     </linearGradient>
                 </defs>
             </svg>
